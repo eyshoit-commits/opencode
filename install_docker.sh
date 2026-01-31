@@ -52,7 +52,7 @@ if [ "$OS" = "Linux" ]; then
         # Add Docker's official GPG key
         echo "Adding Docker GPG key..."
         sudo mkdir -p /etc/apt/keyrings
-        curl -fsSL https://download.docker.com/linux/$DISTRO/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        curl -fsSL "https://download.docker.com/linux/$DISTRO/gpg" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
         
         # Set up repository
         echo "Setting up Docker repository..."
@@ -94,7 +94,7 @@ if [ "$OS" = "Linux" ]; then
     
     # Add current user to docker group
     echo "Adding current user to docker group..."
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker "$USER"
     
     echo ""
     echo "Docker installed successfully!"

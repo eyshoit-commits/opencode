@@ -82,7 +82,7 @@ custom_selection() {
     echo "  4) Conda"
     echo "  5) Docker"
     echo ""
-    read -p "Enter your choices (e.g., 1 3 5): " choices
+    read -r -p "Enter your choices (e.g., 1 3 5): " choices
     
     for choice in $choices; do
         case $choice in
@@ -126,7 +126,7 @@ fi
 # Interactive mode
 while true; do
     show_menu
-    read -p "Enter your choice: " choice
+    read -r -p "Enter your choice: " choice
     
     case $choice in
         1)
