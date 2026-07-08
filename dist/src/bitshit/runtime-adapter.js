@@ -18,16 +18,18 @@ export function createRuntimeBitshitAdapter() {
                     ...input.context,
                     taskId: input.taskId,
                 },
-                severity: "medium",
+                severity: input.severity ?? "medium",
             });
             return {
                 id: blocker.id,
                 taskId: input.taskId,
                 description: blocker.description,
                 context: blocker.context,
-                status: blocker.status === "open" || blocker.status === "in_vote" ? "open" : blocker.status,
+                status: blocker.status,
+                severity: blocker.severity,
                 createdAt: blocker.createdAt,
                 resolvedAt: blocker.resolvedAt,
+                ratSessionId: blocker.ratSessionId,
             };
         },
         async startRat(input) {

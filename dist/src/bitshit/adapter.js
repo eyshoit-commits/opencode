@@ -4,6 +4,14 @@ function makeId() {
 function now() {
     return new Date().toISOString();
 }
+/**
+ * Compatibility-only adapter.
+ *
+ * Use createRuntimeBitshitAdapter() from ./runtime-adapter.js for real persisted
+ * blocker, Rat, vote and memory behavior. This adapter intentionally avoids
+ * random decisions and marks approval output as a stub so callers cannot mistake
+ * it for production state.
+ */
 export function createBitshitAdapter() {
     return {
         async reportBlocker(input) {
@@ -13,6 +21,7 @@ export function createBitshitAdapter() {
                 description: input.description,
                 context: input.context,
                 status: "open",
+                severity: input.severity,
                 createdAt: now(),
             };
         },
@@ -36,13 +45,13 @@ export function createBitshitAdapter() {
                 castAt: now(),
             };
         },
-        async requestApproval(input) {
-            const decisions = ["approved", "rejected", "revise", "blocked"];
+        async requestApproval(_input) {
             return {
-                decision: decisions[Math.floor(Math.random() * decisions.length)],
-                voteSummary: { approve: 0, reject: 0, abstain: 0 },
+                decision: "blocked",
+                voteSummary: { approve: 0, reject: 0, abstain: 0, total: 0 },
                 decidedAt: now(),
                 decidedBy: "bitshit-adapter-stub",
+                isStub: true,
             };
         },
         async remember(_input) {
