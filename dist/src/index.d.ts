@@ -14,6 +14,7 @@ import { createRatSession, addAgentPosition, setFourthVoice, completeRatSession,
 import { castVote, tallyVotes, determineOutcome, listVotes } from "./ensemble/votes.js";
 import { createSyncService, defaultSyncConfig, defaultSyncPaths, buildSyncManifest, getSyncStatus } from "./sync/index.js";
 import { openReviewGate } from "./review-gate/index.js";
+import { createLiveOutputReporter, getLiveOutputSnapshot, resetLiveOutput } from "./live-output/index.js";
 export type { AgentIdentity, IdentityRegistry } from "./identity.js";
 export type { PersonalityPreset } from "./personality.js";
 export type { BitshitControlAdapter } from "./bitshit/types.js";
@@ -27,6 +28,7 @@ export type { RatSession, AgentPosition } from "./ensemble/rat.js";
 export type { VoteRecord, VoteTally, VoteChoice, VoteOutcome } from "./ensemble/votes.js";
 export type { SyncConfig, SyncManifest, SyncOperationResult, SyncPathSpec, SyncStatus } from "./sync/index.js";
 export type { ReviewAnnotation, ReviewDecision, ReviewFeedback, ReviewGateResult, ReviewLineEdit, ReviewSession, ReviewSessionInput, ReviewTrigger, ReviewWorkflow, } from "./review-gate/index.js";
+export type { LiveAgentState, LiveOutputEvent, LiveOutputKind, LiveOutputSnapshot, } from "./live-output/index.js";
 declare const _default: import("@opencode-ai/plugin").Plugin;
 export default _default;
-export { createBackgroundAgentsPlugin, createBitshitAdapter, createIdentityRegistry, getPersonality, discoverRules, validateRule, installRules, getRuleMetadata, createShortTermMemory, readWorktreeMemory, appendWorktreeMemory, syncWorktreeMemory, registerRecallAdapter, getRecallAdapter, listRecallAdapters, recallFromExternal, createDelegation, updateDelegation, readDelegation, listDelegations, createSubtask, updateSubtask, readSubtask, listSubtasks, captureOutput, readOutput, listOutputs, createBlocker, updateBlocker, readBlocker, listBlockers, shouldStartRat, createRatSession, addAgentPosition, setFourthVoice, completeRatSession, readRatSession, listRatSessions, castVote, tallyVotes, determineOutcome, listVotes, createSyncService, defaultSyncConfig, defaultSyncPaths, buildSyncManifest, getSyncStatus, openReviewGate, };
+export { createBackgroundAgentsPlugin, createBitshitAdapter, createIdentityRegistry, getPersonality, discoverRules, validateRule, installRules, getRuleMetadata, createShortTermMemory, readWorktreeMemory, appendWorktreeMemory, syncWorktreeMemory, registerRecallAdapter, getRecallAdapter, listRecallAdapters, recallFromExternal, createDelegation, updateDelegation, readDelegation, listDelegations, createSubtask, updateSubtask, readSubtask, listSubtasks, captureOutput, readOutput, listOutputs, createBlocker, updateBlocker, readBlocker, listBlockers, shouldStartRat, createRatSession, addAgentPosition, setFourthVoice, completeRatSession, readRatSession, listRatSessions, castVote, tallyVotes, determineOutcome, listVotes, createSyncService, defaultSyncConfig, defaultSyncPaths, buildSyncManifest, getSyncStatus, openReviewGate, createLiveOutputReporter, getLiveOutputSnapshot, resetLiveOutput, };

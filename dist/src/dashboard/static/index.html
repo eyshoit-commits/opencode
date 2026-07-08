@@ -22,6 +22,21 @@
 
       <section class="grid stats" id="stats"></section>
 
+      <section class="panel live-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Live telemetry</p>
+            <h2>Subagent Output</h2>
+          </div>
+          <div class="live-controls">
+            <span class="live-indicator"><i></i> live</span>
+            <button id="live-clear">Ansicht leeren</button>
+          </div>
+        </div>
+        <div id="live-agents" class="agent-strip"></div>
+        <div id="live-feed" class="live-feed" aria-live="polite"></div>
+      </section>
+
       <section class="panel">
         <div class="panel-head">
           <h2>Blocker</h2>

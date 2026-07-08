@@ -1,4 +1,7 @@
 let state = null
+let liveSequence = 0
+let liveEvents = []
+let liveAgents = []
 
 const $ = (id) => document.getElementById(id)
 
@@ -35,7 +38,45 @@ function renderStats() {
     [state.ratSessions.length, "Rat sessions"],
     [state.votes.length, "Votes"],
     [state.memories.length, "Memory records"],
+    [state.liveOutput?.agents?.filter((agent) => agent.status === "running").length || 0, "Live agents"],
   ].map(([count, label]) => `<div class="stat"><strong>${count}</strong><span>${label}</span></div>`).join("")
+}
+
+function renderLive(snapshot, append = false) {
+  if (!append) liveEvents = snapshot.events || []
+  else liveEvents = [...liveEvents, ...(snapshot.events || [])].slice(-160)
+  liveSequence = snapshot.sequence || liveSequence
+
+  const agents = snapshot.agents || []
+  liveAgents = agents
+  $("live-agents").innerHTML = agents.length
+    ? agents.map((agent) => `
+      <article class="agent-pill ${escapeHtml(agent.status)}">
+        <span class="agent-dot"></span>
+        <div><strong>${escapeHtml(agent.agentName)} ${agent.instance}</strong>
+        <small>depth ${agent.depth}${agent.lastTool ? ` · ${escapeHtml(agent.lastTool)}` : ""}</small></div>
+      </article>`).join("")
+    : `<p class="muted">Noch keine Subagent-Session erkannt.</p>`
+
+  $("live-feed").innerHTML = liveEvents.length
+    ? liveEvents.map((event) => {
+      const message = event.kind === "tool"
+        ? `<span class="event-arrow">→</span> <strong>${escapeHtml(event.tool)}</strong>${event.detail ? ` <code>${escapeHtml(event.detail)}</code>` : ""}`
+        : event.kind === "finished"
+          ? `<strong>${escapeHtml(event.agentName.toUpperCase())} FINISHED</strong>`
+          : event.kind === "started"
+            ? `<strong>session started</strong>`
+            : `${event.kind === "reasoning" ? "<em>Thinking:</em> " : ""}${escapeHtml(event.text || "")}`
+      return `<article class="live-event ${escapeHtml(event.kind)}" style="--depth:${Math.max(0, event.depth - 1)}">
+        <time>${new Date(event.timestamp).toLocaleTimeString()}</time>
+        <span class="event-agent">${escapeHtml(event.agentName)} ${event.instance}</span>
+        <div>${message}</div>
+      </article>`
+    }).join("")
+    : `<div class="live-empty">Agent output will appear here as sessions fan out.</div>`
+
+  const feed = $("live-feed")
+  feed.scrollTop = feed.scrollHeight
 }
 
 function renderBlockers() {
@@ -117,6 +158,16 @@ async function load() {
   renderRatSessions()
   renderVotes()
   renderMemories()
+  renderLive(state.liveOutput || { sequence: 0, agents: [], events: [] })
+}
+
+async function pollLive() {
+  try {
+    const snapshot = await api(`/api/live-output?after=${liveSequence}`)
+    if (snapshot.events.length || snapshot.agents.length) renderLive(snapshot, true)
+  } catch (error) {
+    console.warn("Live output poll failed", error)
+  }
 }
 
 async function readAloud() {
@@ -158,8 +209,14 @@ $("refresh").addEventListener("click", load)
 $("read-aloud").addEventListener("click", readAloud)
 $("create-demo-blocker").addEventListener("click", createDemoBlocker)
 $("fourth-submit").addEventListener("click", () => fourthVoice().catch((err) => alert(err.message)))
+$("live-clear").addEventListener("click", () => {
+  liveEvents = []
+  renderLive({ sequence: liveSequence, agents: liveAgents, events: [] })
+})
 
 load().catch((err) => {
   console.error(err)
   document.body.insertAdjacentHTML("beforeend", `<pre>${escapeHtml(err.stack || err.message)}</pre>`)
 })
+
+setInterval(pollLive, 800)

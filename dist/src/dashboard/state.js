@@ -3,6 +3,7 @@ import { listRatSessions } from "../ensemble/rat.js";
 import { listVotes } from "../ensemble/votes.js";
 import { createShortTermMemory } from "../memory/short-term.js";
 import { getSyncStatus } from "../sync/index.js";
+import { getLiveOutputSnapshot } from "../live-output/index.js";
 export async function getDashboardState() {
     const memory = createShortTermMemory();
     const [blockers, ratSessions, votes, memories] = await Promise.all([
@@ -18,6 +19,7 @@ export async function getDashboardState() {
         votes,
         memories,
         sync: getSyncStatus(),
+        liveOutput: getLiveOutputSnapshot(),
     };
 }
 export function summarizeDashboardState(state) {
