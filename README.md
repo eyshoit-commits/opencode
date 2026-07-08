@@ -9,32 +9,45 @@ OpenCode plugin pack that combines:
 - Agent Rat planning council
 - vote skills and vote audit
 - installable OpenCode assets: commands, agents, skills and rules
+- BitShit adapter interface
+- Dashboard, memory, rules loader
 
 ## Package
 
 ```bash
 npm install
 npm run typecheck
+npm run build
 ```
 
 ## OpenCode plugin
 
-Main plugin entry:
+Main plugin entry: `src/index.ts`
 
-```text
-src/index.ts
-```
+The plugin exposes:
 
-The plugin exposes background delegation tools:
-
-- `delegate(prompt, agent)`
-- `delegation_read(id)`
-- `delegation_list()`
+- **Background delegation** — `delegate()`, `delegation_read()`, `delegation_list()`
+- **BitShit adapter** — `BitshitControlAdapter` with `reportBlocker`, `startRat`, `recordVote`, `requestApproval`, `remember`
+- **Agent identity** — per-agent personality profiles
+- **Memory** — short-term, worktree-sync, recall
+- **Ensemble / Rat** — blocker-driven agent debates with votes
+- **Dashboard** — blocker approval UI, TTS, fourth voice API
+- **Rules loader** — `.mdc` rule discovery and validation
 
 Delegation artifacts are persisted under:
 
 ```text
 ~/.local/share/opencode/delegations/
+```
+
+## BitShit Adapter
+
+```ts
+import { createBitshitAdapter, type BitshitControlAdapter } from "bkg-oc-plugin-stop-4uck-m3-agen1s"
+const adapter = createBitshitAdapter()
+await adapter.reportBlocker({ taskId, description, context })
+await adapter.startRat({ blockerId, topic, agents })
+await adapter.recordVote({ sessionId, agentId, choice, rationale })
 ```
 
 ## BKG workflow assets
@@ -55,7 +68,7 @@ Install them locally:
 npm run install:assets
 ```
 
-That copies the BKG commands, agents, skills and rules into `~/.config/opencode/`.
+This copies the BKG commands, agents, skills and rules into `~/.config/opencode/`.
 
 ## Six main commands
 
@@ -94,3 +107,7 @@ Votes use:
 - `@bkg-vote-auditor`
 
 No visible vote record, no approval.
+
+## Architecture
+
+See `docs/plugin-ready-plan.md` for the full architecture and `docs/tasks.md` for the lane-based implementation plan.
