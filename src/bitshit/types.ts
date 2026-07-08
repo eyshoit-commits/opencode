@@ -1,7 +1,10 @@
+export type BitshitBlockerStatus = "open" | "in_vote" | "resolved" | "escalated"
+
 export interface BlockerInput {
   taskId: string
   description: string
   context: Record<string, unknown>
+  severity?: "low" | "medium" | "high" | "critical"
 }
 
 export interface BlockerRecord {
@@ -9,9 +12,11 @@ export interface BlockerRecord {
   taskId: string
   description: string
   context: Record<string, unknown>
-  status: "open" | "resolved" | "escalated"
+  status: BitshitBlockerStatus
+  severity?: "low" | "medium" | "high" | "critical"
   createdAt: string
   resolvedAt?: string
+  ratSessionId?: string
 }
 
 export interface RatInput {
@@ -59,6 +64,7 @@ export interface ApprovalDecision {
   voteSummary: Record<string, number>
   decidedAt: string
   decidedBy: string
+  isStub?: boolean
 }
 
 export interface MemoryInput {
