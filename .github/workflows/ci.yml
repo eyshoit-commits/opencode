@@ -44,7 +44,7 @@ jobs:
         run: npm run build
 
       - name: Install assets smoke test
-        run: BKG_OPENCODE_CONFIG_DIR="$RUNNER_TEMP/opencode" npm run install:assets
+        run: OPENCODE_CONFIG_DIR="$RUNNER_TEMP/opencode" npm run install:assets
 
       - name: Verify package contents
         run: npm pack --dry-run
