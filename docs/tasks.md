@@ -21,7 +21,7 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Package name prüfen: `bkg-oc-plugin-stop-4uck-m3-agen1s`
+- [x] Package name geprüft: `bkg-oc-plugin-bkg-dfma`
 - [ ] `npm run typecheck` sicherstellen
 - [ ] CI für typecheck hinzufügen
 - [ ] README auf plugin-ready Ziel aktualisieren

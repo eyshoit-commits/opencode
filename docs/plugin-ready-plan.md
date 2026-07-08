@@ -2,7 +2,7 @@
 
 ## Ziel
 
-`bkg-oc-plugin-stop-4uck-m3-agen1s` wird zuerst als eigenständiges OpenCode-Plugin fertig gemacht und danach als wiederverwendbarer Kern für BitShit übernommen.
+`bkg-oc-plugin-bkg-dfma` wird zuerst als eigenständiges OpenCode-Plugin fertig gemacht und danach als wiederverwendbarer Kern für BitShit übernommen.
 
 Das Plugin soll nicht nur Commands und Prompt-Dateien installieren. Es soll eine echte Kontrollschicht liefern:
 

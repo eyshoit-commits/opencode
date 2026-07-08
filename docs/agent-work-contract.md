@@ -1,6 +1,6 @@
 # Agent Work Contract
 
-This file is mandatory for every agent that works on `bkg-oc-plugin-stop-4uck-m3-agen1s`.
+This file is mandatory for every agent that works on `bkg-oc-plugin-bkg-dfma`.
 
 Purpose: prevent five agents from editing the same file, claiming the same task, or producing beautiful garbage that somebody else has to debug 100 times.
 
