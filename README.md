@@ -1,391 +1,168 @@
-# opencode
+# BKG OpenCode Plugin DFMA
 
-Development environment setup scripts for installing essential development tools.
+BKG OpenCode Plugin DFMA is a plugin-ready OpenCode package for coordinated agent work. It bundles the BKG six-command workflow assets, background delegation, Agent Rat voting, dashboard review gates, local memory, sync manifests, update-notifier parsing, Conclave-style debate sessions, and a stable BitShit adapter surface.
 
-## Overview
-
-This repository provides automated installation scripts for the following development tools:
-
-- **Rust** - Systems programming language (via rustup)
-- **NVM** - Node Version Manager for managing Node.js versions
-- **Python** - Programming language (via pyenv)
-- **Conda** - Package and environment manager (Miniconda)
-- **Docker** - Containerization platform
-
-## Quick Start
-
-### Install All Tools
-
-To install all development tools at once:
-
-```bash
-./setup.sh --all
-```
-
-Or run interactively:
-
-```bash
-./setup.sh
-```
-
-### Install Individual Tools
-
-You can also install tools individually:
-
-```bash
-./install_rust.sh      # Install Rust
-./install_nvm.sh        # Install NVM
-./install_python.sh     # Install Python via pyenv
-./install_conda.sh      # Install Conda
-./install_docker.sh     # Install Docker
-```
-
-## Detailed Installation Guide
-
-### Rust Installation
-
-The `install_rust.sh` script installs Rust using rustup, the official Rust installer:
-
-```bash
-./install_rust.sh
-```
-
-After installation, activate Rust in your current shell:
-
-```bash
-source $HOME/.cargo/env
-```
-
-Or add to your `~/.bashrc` or `~/.zshrc`:
-
-```bash
-source $HOME/.cargo/env
-```
-
-**What gets installed:**
-- rustc (Rust compiler)
-- cargo (Rust package manager)
-- rustup (Rust toolchain installer)
-
-### NVM Installation
-
-The `install_nvm.sh` script installs NVM (Node Version Manager):
-
-```bash
-./install_nvm.sh
-```
-
-After installation, restart your shell or run:
-
-```bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-```
-
-**Usage examples:**
-```bash
-nvm install --lts        # Install latest LTS version
-nvm install 18           # Install Node.js 18
-nvm use 18               # Use Node.js 18
-nvm list                 # List installed versions
-```
-
-### Python Installation
-
-The `install_python.sh` script installs Python using pyenv:
-
-```bash
-./install_python.sh
-```
-
-Add to your `~/.bashrc` or `~/.zshrc`:
-
-```bash
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-```
-
-**Usage examples:**
-```bash
-pyenv install 3.11.7     # Install Python 3.11.7
-pyenv global 3.11.7      # Set as default
-pyenv versions           # List installed versions
-```
-
-### Conda Installation
-
-The `install_conda.sh` script installs Miniconda:
-
-```bash
-./install_conda.sh
-```
-
-After installation, restart your shell or run:
-
-```bash
-source ~/miniconda3/bin/activate
-```
-
-**Usage examples:**
-```bash
-conda create -n myenv python=3.11    # Create environment
-conda activate myenv                  # Activate environment
-conda install numpy pandas            # Install packages
-```
-
-### Docker Installation
-
-The `install_docker.sh` script installs Docker Engine (Linux) or provides instructions for Docker Desktop (macOS):
-
-```bash
-./install_docker.sh
-```
-
-**Linux:** After installation, log out and log back in for group permissions to take effect.
-
-**macOS:** Install Docker Desktop from https://docs.docker.com/desktop/install/mac-install/
-
-**Usage examples:**
-```bash
-docker --version              # Check Docker version
-docker run hello-world        # Test installation
-docker ps                     # List running containers
-```
-
-## System Requirements
-
-### Linux (Ubuntu/Debian)
-- Ubuntu 20.04+ or Debian 10+
-- sudo access
-- Internet connection
-- curl installed
-
-### Linux (Fedora/RHEL/CentOS)
-- Fedora 36+, RHEL 8+, or CentOS 8+
-- sudo access
-- Internet connection
-- curl installed
-
-### macOS
-- macOS 10.15 (Catalina) or later
-- Internet connection
-- curl installed
-
-## Features
-
-- ✅ Automated installation scripts
-- ✅ Interactive and non-interactive modes
-- ✅ Checks for existing installations
-- ✅ Platform detection (Linux/macOS)
-- ✅ Architecture detection (x86_64/ARM)
-- ✅ Error handling and validation
-- ✅ User prompts for confirmation
-- ✅ Detailed installation logs
-
-## Troubleshooting
-
-### Rust
-If you encounter issues with Rust:
-```bash
-rustup update           # Update Rust
-rustup self uninstall   # Uninstall Rust completely
-```
-
-### NVM
-If NVM commands are not found:
-```bash
-# Add to ~/.bashrc or ~/.zshrc
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-```
-
-### Python/pyenv
-If pyenv is not working:
-```bash
-# Ensure these are in your shell config
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-```
-
-### Conda
-If conda command is not found:
-```bash
-source ~/miniconda3/bin/activate
-# Or restart your shell
-```
-
-### Docker
-If you get permission errors:
-```bash
-# Add user to docker group (Linux)
-sudo usermod -aG docker $USER
-# Then log out and back in
-```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Support
-
-For issues or questions:
-- Open an issue on GitHub
-- Check the official documentation for each tool:
-  - [Rust](https://www.rust-lang.org/tools/install)
-  - [NVM](https://github.com/nvm-sh/nvm)
-  - [pyenv](https://github.com/pyenv/pyenv)
-  - [Conda](https://docs.conda.io/)
-  - [Docker](https://docs.docker.com/)
-# bkg-oc-plugin-stop-4uck-m3-agen1s
-
-OpenCode plugin pack that combines:
-
-- persistent background delegation tools inspired by `kdcokenny/opencode-background-agents`
-- plugin-template style package layout inspired by `zenobi-us/opencode-plugin-template`
-- BKG six-main workflow commands
-- visible 4ucker team debates
-- Agent Rat planning council
-- vote skills and vote audit
-- installable OpenCode assets: commands, agents, skills and rules
-- BitShit adapter interface
-- Dashboard, memory, rules loader
+The package is intentionally local-first. It writes runtime state under the user account, exposes browser-based control surfaces, and keeps user approval explicit instead of letting agents quietly decide important things because apparently civilization needed another way to create paperwork.
 
 ## Package
 
-```bash
-npm install
-npm run typecheck
-npm run build
+```json
+{
+  "plugin": ["bkg-oc-plugin-bkg-dfma@0.1.0"]
+}
 ```
 
-## OpenCode plugin
+For local development, install from this repository or use the generated package tarball after `npm pack`.
 
-Main plugin entry: `src/index.ts`
+## Core features
 
-The plugin exposes:
+- **Background agents**: delegate work and store delegation artifacts.
+- **Agent Rat**: escalate blockers into structured multi-agent review.
+- **Vote engine**: record approve, reject, abstain and tally decisions.
+- **Dashboard**: local HTTP UI for blockers, Rat sessions, votes, memory, TTS and fourth-voice requests.
+- **Review gate direction**: Plannotator-inspired local browser approval flow is planned for blocker/plan review.
+- **Conclave model**: Captain plus Facts, Logic and Alternative perspectives with consensus threshold support.
+- **Sync manifest**: OpenCode config, skills, agents, model favorites and BKG plugin state path planning inspired by opencode-synced.
+- **Update notifier parser**: detects pinned plugin refs so updates can be surfaced without auto-updating.
+- **BitShit adapter**: stable interface for future BitShit integration, with both stub and runtime-backed implementations.
 
-- **Background delegation** — `delegate()`, `delegation_read()`, `delegation_list()`
-- **BitShit adapter** — `BitshitControlAdapter` with `reportBlocker`, `startRat`, `recordVote`, `requestApproval`, `remember`
-- **Agent identity** — per-agent personality profiles
-- **Memory** — short-term, worktree-sync, recall
-- **Ensemble / Rat** — blocker-driven agent debates with votes
-- **Dashboard** — blocker approval UI, TTS, fourth voice API
-- **Rules loader** — `.mdc` rule discovery and validation
+## Commands and assets
 
-Delegation artifacts are persisted under:
-
-```text
-~/.local/share/opencode/delegations/
-```
-
-## BitShit Adapter
-
-```ts
-import { createBitshitAdapter, type BitshitControlAdapter } from "bkg-oc-plugin-stop-4uck-m3-agen1s"
-const adapter = createBitshitAdapter()
-await adapter.reportBlocker({ taskId, description, context })
-await adapter.startRat({ blockerId, topic, agents })
-await adapter.recordVote({ sessionId, agentId, choice, rationale })
-```
-
-## BKG workflow assets
-
-## Configuration sync
-
-Configure a private Git repository through the plugin environment:
-
-```text
-BKG_OPENCODE_SYNC_REPO=https://github.com/OWNER/PRIVATE-REPO.git
-BKG_OPENCODE_SYNC_BRANCH=main
-# Optional: BKG_OPENCODE_SYNC_LOCAL_PATH=~/.local/share/opencode-sync
-```
-
-The plugin exposes `sync_status`, `sync_push`, and `sync_pull`. Authentication files,
-prompt history, and other secret paths are excluded by default. Pulls back up existing
-local files below the plugin runtime directory before replacing them.
-
-## Local review gate
-
-`open_review_gate` opens a short-lived local browser review for blockers and Rat
-decisions. The default workflow is `blocker-only`; supported modes are
-`rat-only`, `blocker-only`, `manual`, `all-agents`, and `user-managed`.
-Approve, reject, revise, annotations, and line-range edits are persisted into
-plugin memory and linked Rat reviews also record the human vote. The server
-stops after the decision.
-
-Remote and browser behavior can be configured with:
-
-```text
-BKG_OC_REVIEW_REMOTE=1
-BKG_OC_REVIEW_PORT=4774
-BKG_OC_REVIEW_BROWSER=/path/to/browser
-```
-
-The equivalent `BKG_OC_DASHBOARD_REMOTE`, `BKG_OC_DASHBOARD_PORT`, and
-`BKG_OC_DASHBOARD_BROWSER` variables are accepted as compatibility fallbacks.
-
-Assets live under:
-
-```text
-assets/opencode/
-  commands/
-  agents/
-  skills/
-  rules/
-```
-
-Install them locally:
+The install helper copies packaged OpenCode assets into the user's config directory:
 
 ```bash
 npm run install:assets
 ```
 
-This copies the BKG commands, agents, skills and rules into `~/.config/opencode/`.
+The BKG six-main command model is:
 
-## Six main commands
+```text
+/0ero
+/1brain
+/2hit
+/3some
+/4ever
+/4ucker
+```
 
-Only these are main workflow commands:
+Everything else should remain a subcommand, skill, rule or internal tool. Humans keep inventing menu sprawl; this repo tries not to join them.
 
-- `0ero`
-- `1brain`
-- `2hit`
-- `3some`
-- `4ever`
-- `4ucker`
+## Dashboard
 
-Everything else is a subcommand.
+Start the local dashboard during development:
 
-## 4ucker system
+```bash
+npm run dashboard:start
+```
 
-`4ucker team` uses:
+Default URL:
 
-- `@bkg-4ucker-builder`
-- `@bkg-4ucker-reviewer`
-- `@bkg-4ucker-product`
+```text
+http://127.0.0.1:4774
+```
 
-`4ucker rat` uses:
+Environment variables:
 
-- `@bkg-rat-architect`
-- `@bkg-rat-builder`
-- `@bkg-rat-reviewer`
-- `@bkg-rat-product`
-- `@bkg-rat-growth`
-- `@bkg-rat-contrarian`
+```bash
+BKG_OC_DASHBOARD_HOST=127.0.0.1
+BKG_OC_DASHBOARD_PORT=4774
+```
 
-Votes use:
+Dashboard API endpoints currently include:
 
-- `@bkg-vote-chair`
-- `@bkg-vote-recorder`
-- `@bkg-vote-auditor`
+```text
+GET  /api/state
+GET  /api/summary
+POST /api/blocker
+POST /api/rat/start
+POST /api/vote
+POST /api/user/approve
+POST /api/user/reject
+POST /api/user/revise
+GET  /api/vote/tally?ratSessionId=...
+POST /api/tts/read
+POST /api/fourth-voice/request
+```
 
-No visible vote record, no approval.
+## BitShit adapter
 
-## Architecture
+Two adapter entry points exist:
 
-See `docs/plugin-ready-plan.md` for the full architecture and `docs/tasks.md` for the lane-based implementation plan.
+```ts
+import { createBitshitAdapter } from "./src/bitshit/adapter.js"
+import { createRuntimeBitshitAdapter } from "./src/bitshit/runtime-adapter.js"
+```
+
+Use `createRuntimeBitshitAdapter()` for real plugin state. It delegates blockers, Rat sessions, votes and memory to the local runtime modules.
+
+`createBitshitAdapter()` remains a compatibility stub and marks approval decisions with `isStub: true`.
+
+## Agent coordination rules
+
+Every helper agent must follow:
+
+```text
+docs/agent-work-contract.md
+```
+
+Lane prompts live in:
+
+```text
+docs/agent-lane-prompts.md
+```
+
+Hard rule:
+
+```text
+No claim, no work.
+No evidence, no done.
+No silent blocker.
+```
+
+This prevents five agents from simultaneously editing the same file and then acting surprised when Git turns into a crime scene.
+
+## Development
+
+Install dependencies:
+
+```bash
+npm ci
+```
+
+Run checks:
+
+```bash
+npm run lint:readme
+npm run typecheck
+npm run test
+npm run build
+npm pack --dry-run
+```
+
+Full CI-equivalent command:
+
+```bash
+npm run ci
+```
+
+## Test scope
+
+The current test suite is intentionally small and contract-focused:
+
+- update-notifier pinned plugin parsing
+- Conclave session early-stop behavior
+- BitShit runtime adapter smoke contract
+
+More integration tests should be added as the dashboard review gate becomes executable.
+
+## Security and release posture
+
+- Dependencies are pinned to semver ranges, not `latest`.
+- The package name avoids profanity and leetspeak to stay publishable and corporate-proxy-safe.
+- The plugin does not auto-update dependencies or plugin refs.
+- Update detection should only notify and never mutate config without explicit approval.
+- Runtime decisions that affect work should flow through Rat, vote or user approval state.
+
+## License
+
+MIT. See `LICENSE`.
