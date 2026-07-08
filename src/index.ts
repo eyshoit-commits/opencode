@@ -7,12 +7,18 @@ import { registerRecallAdapter, getRecallAdapter, listRecallAdapters, recallFrom
 import { createDelegation, updateDelegation, readDelegation, listDelegations } from "./subagents/delegation.js"
 import { createSubtask, updateSubtask, readSubtask, listSubtasks } from "./subagents/subtasks.js"
 import { captureOutput, readOutput, listOutputs } from "./subagents/output-capture.js"
+import { createBlocker, updateBlocker, readBlocker, listBlockers, shouldStartRat } from "./ensemble/blockers.js"
+import { createRatSession, addAgentPosition, setFourthVoice, completeRatSession, readRatSession, listRatSessions } from "./ensemble/rat.js"
+import { castVote, tallyVotes, determineOutcome, listVotes } from "./ensemble/votes.js"
 export type { BitshitControlAdapter } from "./bitshit/types.js"
 export type { RuleEntry, RuleMetadata } from "./rules-loader.js"
 export type { MemoryRecord, MemoryQuery, MemoryStore, ExternalRecallAdapter } from "./memory/types.js"
 export type { SubDelegation } from "./subagents/delegation.js"
 export type { Subtask } from "./subagents/subtasks.js"
 export type { AgentRunOutput } from "./subagents/output-capture.js"
+export type { BlockerRecord } from "./ensemble/blockers.js"
+export type { RatSession, AgentPosition } from "./ensemble/rat.js"
+export type { VoteRecord, VoteTally, VoteChoice, VoteOutcome } from "./ensemble/votes.js"
 
 export default createBackgroundAgentsPlugin()
 export {
@@ -25,4 +31,7 @@ export {
   createDelegation, updateDelegation, readDelegation, listDelegations,
   createSubtask, updateSubtask, readSubtask, listSubtasks,
   captureOutput, readOutput, listOutputs,
+  createBlocker, updateBlocker, readBlocker, listBlockers, shouldStartRat,
+  createRatSession, addAgentPosition, setFourthVoice, completeRatSession, readRatSession, listRatSessions,
+  castVote, tallyVotes, determineOutcome, listVotes,
 }
