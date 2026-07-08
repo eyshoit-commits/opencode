@@ -52,7 +52,7 @@ dashboard/review-gate settings, and ACP limitations, see
 - **Agent Rat**: escalate blockers into structured multi-agent review.
 - **Vote engine**: record approve, reject, abstain and tally decisions.
 - **Dashboard**: local HTTP UI for blockers, Rat sessions, votes, memory, TTS and fourth-voice requests.
-- **Review gate direction**: Plannotator-inspired local browser approval flow is planned for blocker/plan review.
+- **Review gate**: Plannotator-inspired local browser approval flow supports approve, reject, revise, and annotations for blocker and Rat decisions.
 - **Conclave model**: Captain plus Facts, Logic and Alternative perspectives with consensus threshold support.
 - **Sync manifest**: OpenCode config, skills, agents, model favorites and BKG plugin state path planning inspired by opencode-synced.
 - **Update notifier parser**: detects pinned plugin refs so updates can be surfaced without auto-updating.
