@@ -17,6 +17,7 @@ For local development, install from this repository or use the generated package
 ## Core features
 
 - **Background agents**: delegate work and store delegation artifacts.
+- **Live subagent output**: stream nested agent sessions, tools, reasoning and results into the dashboard.
 - **Agent Rat**: escalate blockers into structured multi-agent review.
 - **Vote engine**: record approve, reject, abstain and tally decisions.
 - **Dashboard**: local HTTP UI for blockers, Rat sessions, votes, memory, TTS and fourth-voice requests.
@@ -73,6 +74,7 @@ Dashboard API endpoints currently include:
 ```text
 GET  /api/state
 GET  /api/summary
+GET  /api/live-output?after=<sequence>
 POST /api/blocker
 POST /api/rat/start
 POST /api/vote
@@ -83,6 +85,17 @@ GET  /api/vote/tally?ratSessionId=...
 POST /api/tts/read
 POST /api/fourth-voice/request
 ```
+
+The **Subagent Output** panel updates roughly every 800 ms. OpenCode plugin
+events are normalized, deduplicated, and written to a bounded local JSONL feed
+so a separately started dashboard process can follow them live. The feed keeps
+agent names, instance numbers, nesting depth, tool details, final text and a
+clear finished state.
+
+This behavior is inspired by the GPL-3.0 project
+[`raisbecka/opencode-subagent-output`](https://github.com/raisbecka/opencode-subagent-output).
+No third-party source file is vendored; the dashboard integration, event model,
+storage bridge and UI are implemented in this package.
 
 ## BitShit adapter
 

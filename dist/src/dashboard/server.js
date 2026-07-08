@@ -1,7 +1,7 @@
 import * as fs from "node:fs/promises";
 import * as http from "node:http";
 import * as path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { handleDashboardApi } from "./api.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,7 +60,8 @@ export function startDashboardServer(options = {}) {
     server.listen(port, host);
     return server;
 }
-if (import.meta.url === `file://${process.argv[1]}`) {
+const entrypointUrl = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : undefined;
+if (entrypointUrl && import.meta.url === entrypointUrl) {
     const port = Number(process.env.BKG_OC_DASHBOARD_PORT ?? "4774");
     const host = process.env.BKG_OC_DASHBOARD_HOST ?? "127.0.0.1";
     startDashboardServer({ host, port });
