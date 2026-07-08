@@ -14,6 +14,11 @@ import { createRatSession, addAgentPosition, setFourthVoice, completeRatSession,
 import { castVote, tallyVotes, determineOutcome, listVotes } from "./ensemble/votes.js"
 import { createSyncService, defaultSyncConfig, defaultSyncPaths, buildSyncManifest, getSyncStatus } from "./sync/index.js"
 import { openReviewGate } from "./review-gate/index.js"
+import {
+  createLiveOutputReporter,
+  getLiveOutputSnapshot,
+  resetLiveOutput,
+} from "./live-output/index.js"
 export type { AgentIdentity, IdentityRegistry } from "./identity.js"
 export type { PersonalityPreset } from "./personality.js"
 export type { BitshitControlAdapter } from "./bitshit/types.js"
@@ -37,6 +42,12 @@ export type {
   ReviewTrigger,
   ReviewWorkflow,
 } from "./review-gate/index.js"
+export type {
+  LiveAgentState,
+  LiveOutputEvent,
+  LiveOutputKind,
+  LiveOutputSnapshot,
+} from "./live-output/index.js"
 
 export default createBackgroundAgentsPlugin()
 export {
@@ -55,4 +66,5 @@ export {
   castVote, tallyVotes, determineOutcome, listVotes,
   createSyncService, defaultSyncConfig, defaultSyncPaths, buildSyncManifest, getSyncStatus,
   openReviewGate,
+  createLiveOutputReporter, getLiveOutputSnapshot, resetLiveOutput,
 }

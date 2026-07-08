@@ -10,7 +10,7 @@
     <main class="shell">
       <header class="hero">
         <div>
-          <p class="eyebrow">bkg-oc-plugin-stop-4uck-m3-agen1s</p>
+          <p class="eyebrow">bkg-oc-plugin-bkg-dfma</p>
           <h1>OpenCode Control Dashboard</h1>
           <p class="muted">Blocker, Agent Rat, Votes, Memory und Sync. Endlich ein Ort, an dem Agenten sich nicht heimlich in JSON verstecken.</p>
         </div>
@@ -21,6 +21,21 @@
       </header>
 
       <section class="grid stats" id="stats"></section>
+
+      <section class="panel live-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Live telemetry</p>
+            <h2>Subagent Output</h2>
+          </div>
+          <div class="live-controls">
+            <span class="live-indicator"><i></i> live</span>
+            <button id="live-clear">Ansicht leeren</button>
+          </div>
+        </div>
+        <div id="live-agents" class="agent-strip"></div>
+        <div id="live-feed" class="live-feed" aria-live="polite"></div>
+      </section>
 
       <section class="panel">
         <div class="panel-head">

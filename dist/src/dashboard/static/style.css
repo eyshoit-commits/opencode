@@ -155,6 +155,55 @@ h1 { margin-bottom: 0.5rem; }
 
 .small { font-size: 0.84rem; color: var(--muted); }
 
+.live-panel {
+  background:
+    linear-gradient(180deg, rgba(134,239,172,0.035), transparent 35%),
+    rgba(10, 15, 23, 0.96);
+}
+
+.live-panel h2 { margin-bottom: 0; }
+.live-controls, .live-indicator, .agent-pill { display: flex; align-items: center; }
+.live-controls { gap: 0.7rem; }
+.live-indicator {
+  gap: 0.45rem;
+  color: var(--accent);
+  font: 700 0.72rem ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.live-indicator i, .agent-dot {
+  width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(134,239,172,0.1), 0 0 18px rgba(134,239,172,0.65);
+}
+.agent-strip { display: flex; gap: 0.65rem; overflow-x: auto; padding: 1rem 0; }
+.agent-pill {
+  flex: 0 0 auto; gap: 0.7rem; min-width: 180px; padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line); border-radius: 12px; background: #0b111b;
+}
+.agent-pill small { display: block; color: var(--muted); margin-top: 0.15rem; }
+.agent-pill.finished { opacity: 0.58; }
+.agent-pill.finished .agent-dot { background: var(--muted); box-shadow: none; }
+.live-feed {
+  height: min(460px, 52vh); overflow: auto; border: 1px solid var(--line);
+  border-radius: 14px; background: #06090e; padding: 0.45rem;
+  font: 0.82rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+.live-event {
+  display: grid; grid-template-columns: 78px 130px minmax(0, 1fr); gap: 0.7rem;
+  padding: 0.55rem 0.7rem 0.55rem calc(0.7rem + var(--depth) * 14px);
+  border-bottom: 1px solid rgba(34,48,71,0.55);
+}
+.live-event:last-child { border-bottom: 0; }
+.live-event time { color: #607089; }
+.event-agent { color: #9cc7ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.live-event code { color: var(--accent); white-space: pre-wrap; overflow-wrap: anywhere; }
+.live-event.reasoning { color: #c4b5fd; }
+.live-event.finished { color: var(--accent); background: rgba(134,239,172,0.05); }
+.event-arrow { color: var(--accent); }
+.live-empty { color: var(--muted); padding: 2rem; text-align: center; }
+
 @media (max-width: 720px) {
   .hero { flex-direction: column; }
+  .live-event { grid-template-columns: 68px 1fr; }
+  .live-event > div { grid-column: 1 / -1; }
 }

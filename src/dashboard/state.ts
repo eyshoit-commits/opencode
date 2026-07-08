@@ -3,6 +3,7 @@ import { listRatSessions } from "../ensemble/rat.js"
 import { listVotes } from "../ensemble/votes.js"
 import { createShortTermMemory } from "../memory/short-term.js"
 import { getSyncStatus } from "../sync/index.js"
+import { getLiveOutputSnapshot, type LiveOutputSnapshot } from "../live-output/index.js"
 
 export interface DashboardState {
   generatedAt: string
@@ -11,6 +12,7 @@ export interface DashboardState {
   votes: unknown[]
   memories: unknown[]
   sync: unknown
+  liveOutput: LiveOutputSnapshot
 }
 
 export async function getDashboardState(): Promise<DashboardState> {
@@ -29,6 +31,7 @@ export async function getDashboardState(): Promise<DashboardState> {
     votes,
     memories,
     sync: getSyncStatus(),
+    liveOutput: getLiveOutputSnapshot(),
   }
 }
 

@@ -12,6 +12,7 @@ import {
 } from "./subagents/delegation.js"
 import { createSubtask, listSubtasks } from "./subagents/subtasks.js"
 import { captureOutput, listOutputs } from "./subagents/output-capture.js"
+import { createLiveOutputReporter } from "./live-output/index.js"
 
 export interface DelegationRecord {
   id: string
@@ -28,6 +29,7 @@ export interface DelegationRecord {
 }
 
 const DEFAULT_TIMEOUT_MS = 15 * 60 * 1000
+const liveOutputReporter = createLiveOutputReporter()
 
 function delegationRoot() {
   return path.join(os.homedir(), ".local", "share", "opencode", "delegations")
@@ -146,6 +148,9 @@ async function runDelegation(prompt: string, agent: string, timeoutMs = DEFAULT_
 
 export function createBackgroundAgentsPlugin(): Plugin {
   return async () => ({
+    event: async ({ event }) => {
+      liveOutputReporter.handle(event)
+    },
     tool: {
       delegate: tool({
         description: "Create a durable pending delegation and registration output.",

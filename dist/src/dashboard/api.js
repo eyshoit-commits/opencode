@@ -4,6 +4,7 @@ import { castVote, tallyVotes } from "../ensemble/votes.js";
 import { createShortTermMemory } from "../memory/short-term.js";
 import { getDashboardState, summarizeDashboardState } from "./state.js";
 import { createTtsResponse } from "./tts.js";
+import { getLiveOutputSnapshot } from "../live-output/index.js";
 async function readJson(request) {
     const text = await request.text();
     return (text ? JSON.parse(text) : {});
@@ -20,6 +21,10 @@ export async function handleDashboardApi(request) {
     const path = url.pathname;
     if (request.method === "GET" && path === "/api/state") {
         return json(await getDashboardState());
+    }
+    if (request.method === "GET" && path === "/api/live-output") {
+        const after = Number(url.searchParams.get("after") ?? "0");
+        return json(getLiveOutputSnapshot(Number.isFinite(after) ? after : 0));
     }
     if (request.method === "GET" && path === "/api/summary") {
         const state = await getDashboardState();
