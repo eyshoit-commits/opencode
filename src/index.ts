@@ -19,6 +19,7 @@ import {
   getLiveOutputSnapshot,
   resetLiveOutput,
 } from "./live-output/index.js"
+import { loadAcpCompatibilityConfig, reviewGateTimeoutMs } from "./acp/index.js"
 export type { AgentIdentity, IdentityRegistry } from "./identity.js"
 export type { PersonalityPreset } from "./personality.js"
 export type { BitshitControlAdapter } from "./bitshit/types.js"
@@ -48,6 +49,7 @@ export type {
   LiveOutputKind,
   LiveOutputSnapshot,
 } from "./live-output/index.js"
+export type { AcpCompatibilityConfig, AcpReviewGateMode } from "./acp/index.js"
 
 export default createBackgroundAgentsPlugin()
 export {
@@ -67,4 +69,5 @@ export {
   createSyncService, defaultSyncConfig, defaultSyncPaths, buildSyncManifest, getSyncStatus,
   openReviewGate,
   createLiveOutputReporter, getLiveOutputSnapshot, resetLiveOutput,
+  loadAcpCompatibilityConfig, reviewGateTimeoutMs,
 }

@@ -14,6 +14,37 @@ The package is intentionally local-first. It writes runtime state under the user
 
 For local development, install from this repository or use the generated package tarball after `npm pack`.
 
+## ACP editors
+
+OpenCode already speaks ACP. Start it as the editor-managed subprocess with:
+
+```bash
+opencode acp
+```
+
+The plugin continues to work through OpenCode's normal tools, commands, agents,
+rules, permissions, MCP servers, formatters, and linters. It does not implement
+its own JSON-RPC transport.
+
+Zed:
+
+```json
+{
+  "agent_servers": {
+    "OpenCode": {
+      "command": "opencode",
+      "args": ["acp"]
+    }
+  }
+}
+```
+
+JetBrains uses the same shape but should set `command` to the absolute path of
+the OpenCode binary. For Avante.nvim and CodeCompanion examples, remote
+dashboard/review-gate settings, and ACP limitations, see
+[`docs/acp.md`](docs/acp.md). OpenCode currently does not support `/undo` and
+`/redo` in ACP mode.
+
 ## Core features
 
 - **Background agents**: delegate work and store delegation artifacts.
