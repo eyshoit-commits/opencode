@@ -35,8 +35,8 @@
     "dashboard:start": "tsx src/dashboard/server.ts"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "^1.1.10",
-    "@opencode-ai/sdk": "^0.32.0"
+    "@opencode-ai/plugin": "^1.17.15",
+    "@opencode-ai/sdk": "^1.17.15"
   },
   "devDependencies": {
     "@types/node": "^22.13.14",
