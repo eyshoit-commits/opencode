@@ -12,14 +12,17 @@ export interface AgentRunOutput {
   createdAt: string
 }
 
-const OUTPUT_DIR = path.join(os.homedir(), ".local", "share", "opencode", "outputs")
+function outputDir(): string {
+  return process.env.BKG_OC_OUTPUTS_DIR ??
+    path.join(os.homedir(), ".local", "share", "opencode", "outputs")
+}
 
 function makeId(): string {
   return `out-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
 
 async function ensureDir(): Promise<void> {
-  await fs.mkdir(OUTPUT_DIR, { recursive: true })
+  await fs.mkdir(outputDir(), { recursive: true })
 }
 
 export async function captureOutput(input: {
@@ -40,7 +43,7 @@ export async function captureOutput(input: {
     createdAt: new Date().toISOString(),
   }
   await fs.writeFile(
-    path.join(OUTPUT_DIR, `${output.id}.json`),
+    path.join(outputDir(), `${output.id}.json`),
     JSON.stringify(output, null, 2) + "\n",
     "utf8",
   )
@@ -48,8 +51,9 @@ export async function captureOutput(input: {
 }
 
 export async function readOutput(id: string): Promise<AgentRunOutput | null> {
+  if (!/^[a-zA-Z0-9_-]+$/.test(id)) return null
   try {
-    const raw = await fs.readFile(path.join(OUTPUT_DIR, `${id}.json`), "utf8")
+    const raw = await fs.readFile(path.join(outputDir(), `${id}.json`), "utf8")
     return JSON.parse(raw) as AgentRunOutput
   } catch {
     return null
@@ -58,11 +62,11 @@ export async function readOutput(id: string): Promise<AgentRunOutput | null> {
 
 export async function listOutputs(agentId?: string, delegationId?: string): Promise<AgentRunOutput[]> {
   await ensureDir()
-  const files = await fs.readdir(OUTPUT_DIR)
+  const files = await fs.readdir(outputDir())
   const outputs: AgentRunOutput[] = []
   for (const file of files.filter((f: string) => f.endsWith(".json"))) {
     try {
-      const o = JSON.parse(await fs.readFile(path.join(OUTPUT_DIR, file), "utf8")) as AgentRunOutput
+      const o = JSON.parse(await fs.readFile(path.join(outputDir(), file), "utf8")) as AgentRunOutput
       if (agentId && o.agentId !== agentId) continue
       if (delegationId && o.delegationId !== delegationId) continue
       outputs.push(o)
