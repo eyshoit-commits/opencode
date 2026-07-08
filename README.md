@@ -1,4 +1,4 @@
-# bk-sstio-fuck-up-me-opencode-plugin
+# bkg-oc-plugin-stop-4uck-m3-agen1s
 
 OpenCode plugin pack that combines:
 
