@@ -26,7 +26,6 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "prepare": "npm run build",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "install:assets": "tsx scripts/install-assets.ts"
   },
