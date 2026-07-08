@@ -1,0 +1,30 @@
+{
+  "name": "bkg-oc-plugin-stop-4uck-m3-agen1s",
+  "version": "0.1.0",
+  "description": "BKG OpenCode plugin pack with background agents, six-main workflow assets, Agent Rat and vote skills.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "assets",
+    "scripts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "install:assets": "tsx scripts/install-assets.ts"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "latest",
+    "@opencode-ai/sdk": "latest",
+    "unique-names-generator": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest"
+  },
+  "license": "MIT"
+}
