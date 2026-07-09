@@ -1,5 +1,5 @@
-import { nowIso } from "../core/types";
-import { defaultSyncConfig, defaultSyncPaths } from "./config";
+import { nowIso } from "../core/types.js";
+import { defaultSyncConfig, defaultSyncPaths } from "./config.js";
 export function buildSyncManifest(config = defaultSyncConfig()) {
     const now = nowIso();
     return {

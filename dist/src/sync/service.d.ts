@@ -1,4 +1,4 @@
-import type { SyncConfig, SyncOperationResult, SyncStatus } from "./types";
+import type { SyncConfig, SyncOperationResult, SyncStatus } from "./types.js";
 export interface SyncService {
     status(): Promise<SyncStatus>;
     push(message?: string): Promise<SyncOperationResult>;

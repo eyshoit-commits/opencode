@@ -17,3 +17,4 @@ export declare function updateBlocker(id: string, update: Partial<BlockerRecord>
 export declare function readBlocker(id: string): Promise<BlockerRecord>;
 export declare function listBlockers(status?: BlockerRecord["status"]): Promise<BlockerRecord[]>;
 export declare function shouldStartRat(blocker: BlockerRecord): boolean;
+export declare function autoStartRatForBlocker(blocker: BlockerRecord, agents: string[]): Promise<BlockerRecord>;

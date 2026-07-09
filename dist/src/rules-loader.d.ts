@@ -20,7 +20,7 @@ export declare function validateRule(content: string): {
     errors: string[];
 };
 /**
- * Copy all .mdc rule files from sourceDir to targetDir.
+ * Copy all .mdc rule files from sourceDir to targetDir, preserving subdirectory structure.
  */
 export declare function installRules(sourceDir: string, targetDir: string): Promise<void>;
 /**

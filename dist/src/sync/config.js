@@ -1,6 +1,6 @@
 import * as path from "node:path";
-import { runtimeRoot } from "../core/store";
-import { resolveSyncPlatformPaths } from "./paths";
+import { runtimeRoot } from "../core/store.js";
+import { resolveSyncPlatformPaths } from "./paths.js";
 export function defaultSyncConfig() {
     const remote = process.env.BKG_OPENCODE_SYNC_REPO;
     const repo = remote

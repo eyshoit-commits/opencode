@@ -34,11 +34,17 @@ export function validateRule(content) {
     const errors = [];
     const lines = content.split("\n");
     if (lines.length < 3 || lines[0].trim() !== "---") {
-        return { valid: false, errors: ["Missing opening --- frontmatter delimiter"] };
+        return {
+            valid: false,
+            errors: ["Missing opening --- frontmatter delimiter"],
+        };
     }
     const endIdx = lines.indexOf("---", 1);
     if (endIdx === -1) {
-        return { valid: false, errors: ["Missing closing --- frontmatter delimiter"] };
+        return {
+            valid: false,
+            errors: ["Missing closing --- frontmatter delimiter"],
+        };
     }
     const block = lines.slice(1, endIdx);
     const parsed = {};
@@ -72,16 +78,25 @@ export function validateRule(content) {
     return { valid: errors.length === 0, errors };
 }
 /**
- * Copy all .mdc rule files from sourceDir to targetDir.
+ * Copy all .mdc rule files from sourceDir to targetDir, preserving subdirectory structure.
  */
 export async function installRules(sourceDir, targetDir) {
     await fs.mkdir(targetDir, { recursive: true });
-    const entries = await fs.readdir(sourceDir, { withFileTypes: true });
-    for (const entry of entries) {
-        if (entry.isFile() && entry.name.endsWith(".mdc")) {
-            await fs.copyFile(path.join(sourceDir, entry.name), path.join(targetDir, entry.name));
+    async function copyDir(src, dst) {
+        const entries = await fs.readdir(src, { withFileTypes: true });
+        for (const entry of entries) {
+            const srcPath = path.join(src, entry.name);
+            const dstPath = path.join(dst, entry.name);
+            if (entry.isDirectory()) {
+                await fs.mkdir(dstPath, { recursive: true });
+                await copyDir(srcPath, dstPath);
+            }
+            else if (entry.isFile() && entry.name.endsWith(".mdc")) {
+                await fs.copyFile(srcPath, dstPath);
+            }
         }
     }
+    await copyDir(sourceDir, targetDir);
 }
 /**
  * Parse and extract metadata from a rule file's frontmatter.
@@ -115,7 +130,9 @@ export function getRuleMetadata(content) {
             parsed[key] = value;
         }
     }
-    const keywords = Array.isArray(parsed.keywords) ? parsed.keywords : [];
+    const keywords = Array.isArray(parsed.keywords)
+        ? parsed.keywords
+        : [];
     const match = parsed.match === "all" ? "all" : "any";
     const description = typeof parsed.description === "string" ? parsed.description : undefined;
     return { keywords, match, description };

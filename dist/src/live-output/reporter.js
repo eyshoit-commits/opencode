@@ -20,6 +20,11 @@ export function createLiveOutputReporter() {
                 return false;
             if (rootSessionIds.has(parentId))
                 return true;
+            // Plugins can be initialized after the current root session was created,
+            // so its session.created event is not guaranteed to reach this reporter.
+            // A known session with an unknown parent is still a valid subagent.
+            if (!sessions.has(parentId))
+                return true;
             cursor = parentId;
         }
         return false;
@@ -32,6 +37,8 @@ export function createLiveOutputReporter() {
             seen.add(cursor);
             const parentId = sessions.get(cursor)?.parentId;
             if (!parentId || rootSessionIds.has(parentId))
+                return depth + 1;
+            if (!sessions.has(parentId))
                 return depth + 1;
             depth += 1;
             cursor = parentId;

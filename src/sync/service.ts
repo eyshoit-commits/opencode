@@ -2,11 +2,11 @@ import { execFile } from "node:child_process"
 import * as fs from "node:fs/promises"
 import * as path from "node:path"
 import { promisify } from "node:util"
-import { runtimeRoot } from "../core/store"
-import { defaultSyncConfig, defaultSyncPaths } from "./config"
-import { buildSyncManifest, getSyncStatus } from "./manifest"
-import { expandHome, resolveSyncPlatformPaths } from "./paths"
-import type { SyncConfig, SyncManifest, SyncOperationResult, SyncPathSpec, SyncStatus } from "./types"
+import { runtimeRoot } from "../core/store.js"
+import { defaultSyncConfig, defaultSyncPaths } from "./config.js"
+import { buildSyncManifest, getSyncStatus } from "./manifest.js"
+import { expandHome, resolveSyncPlatformPaths } from "./paths.js"
+import type { SyncConfig, SyncManifest, SyncOperationResult, SyncPathSpec, SyncStatus } from "./types.js"
 
 const execFileAsync = promisify(execFile)
 

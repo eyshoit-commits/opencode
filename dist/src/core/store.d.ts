@@ -1,4 +1,4 @@
-import type { PluginRuntimeState } from "./types";
+import type { PluginRuntimeState } from "./types.js";
 export declare function runtimeRoot(): string;
 export declare function statePath(): string;
 export declare function defaultState(): PluginRuntimeState;

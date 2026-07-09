@@ -94,6 +94,30 @@ describe("live subagent output reporter", () => {
     expect(getLiveOutputSnapshot().agents).toHaveLength(2)
   })
 
+  it("tracks a child when the plugin missed the root session creation event", () => {
+    const reporter = createLiveOutputReporter()
+    reporter.handle({
+      type: "session.created",
+      properties: { info: { id: "child", parentID: "already-open-root" } },
+    })
+    reporter.handle({
+      type: "message.updated",
+      properties: {
+        info: { sessionID: "child", role: "assistant", agent: "explore" },
+      },
+    })
+
+    expect(getLiveOutputSnapshot().agents).toEqual([
+      expect.objectContaining({
+        sessionId: "child",
+        parentId: "already-open-root",
+        agentName: "Explore",
+        depth: 1,
+        status: "running",
+      }),
+    ])
+  })
+
   it("bridges events to a separately running dashboard process", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "bkg-live-output-"))
     process.env.BKG_OC_LIVE_OUTPUT_FILE = path.join(root, "events.jsonl")

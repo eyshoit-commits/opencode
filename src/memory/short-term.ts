@@ -1,44 +1,55 @@
-import * as fs from "node:fs/promises"
-import * as path from "node:path"
-import * as os from "node:os"
-import type { MemoryRecord, MemoryQuery, MemoryStore } from "./types.js"
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+import * as os from "node:os";
+import type { MemoryRecord, MemoryQuery, MemoryStore } from "./types.js";
 
 function makeId(): string {
-  return crypto.randomUUID()
+  return crypto.randomUUID();
 }
 
 function now(): string {
-  return new Date().toISOString()
+  return new Date().toISOString();
 }
 
 function storePath(): string {
-  return path.join(os.homedir(), ".local", "share", "opencode", "memory", "short-term.json")
+  return path.join(
+    os.homedir(),
+    ".local",
+    "share",
+    "opencode",
+    "memory",
+    "short-term.json",
+  );
 }
 
 export function createShortTermMemory(): MemoryStore {
-  let cache: MemoryRecord[] | null = null
+  let cache: MemoryRecord[] | null = null;
 
   async function load(): Promise<MemoryRecord[]> {
-    if (cache) return cache
+    if (cache) return cache;
     try {
-      const raw = await fs.readFile(storePath(), "utf8")
-      cache = JSON.parse(raw) as MemoryRecord[]
-      return cache
+      const raw = await fs.readFile(storePath(), "utf8");
+      cache = JSON.parse(raw) as MemoryRecord[];
+      return cache;
     } catch {
-      cache = []
-      return cache
+      cache = [];
+      return cache;
     }
   }
 
   async function save(): Promise<void> {
-    if (!cache) return
-    await fs.mkdir(path.dirname(storePath()), { recursive: true })
-    await fs.writeFile(storePath(), JSON.stringify(cache, null, 2) + "\n", "utf8")
+    if (!cache) return;
+    await fs.mkdir(path.dirname(storePath()), { recursive: true });
+    await fs.writeFile(
+      storePath(),
+      JSON.stringify(cache, null, 2) + "\n",
+      "utf8",
+    );
   }
 
   const store: MemoryStore = {
     async append(record) {
-      const records = await load()
+      const records = await load();
       const entry: MemoryRecord = {
         id: makeId(),
         key: record.key,
@@ -47,45 +58,79 @@ export function createShortTermMemory(): MemoryStore {
         metadata: record.metadata,
         createdAt: now(),
         updatedAt: now(),
-      }
-      records.push(entry)
-      cache = records
-      await save()
-      return entry
+      };
+      records.push(entry);
+      cache = records;
+      await save();
+      return entry;
     },
 
     async read(id: string) {
-      const records = await load()
-      return records.find((r) => r.id === id) ?? null
+      const records = await load();
+      return records.find((r) => r.id === id) ?? null;
     },
 
     async list(query?: MemoryQuery) {
-      let records = await load()
+      let records = await load();
       if (query?.key) {
-        records = records.filter((r) => r.key === query.key)
+        records = records.filter((r) => r.key === query.key);
       }
       if (query?.worktree) {
-        records = records.filter((r) => r.worktree === query.worktree)
+        records = records.filter((r) => r.worktree === query.worktree);
       }
       if (query?.search) {
-        const q = query.search.toLowerCase()
-        records = records.filter((r) => r.content.toLowerCase().includes(q) || r.key.toLowerCase().includes(q))
+        const q = query.search.toLowerCase();
+        records = records.filter(
+          (r) =>
+            r.content.toLowerCase().includes(q) ||
+            r.key.toLowerCase().includes(q),
+        );
       }
-      const offset = query?.offset ?? 0
-      const limit = query?.limit ?? 50
-      return records.slice(offset, offset + limit)
+      const offset = query?.offset ?? 0;
+      const limit = query?.limit ?? 50;
+      return records.slice(offset, offset + limit);
     },
 
     async search(query: string, worktree?: string) {
-      return store.list({ search: query, worktree })
+      return store.list({ search: query, worktree });
     },
 
     async remove(id: string) {
-      const records = await load()
-      cache = records.filter((r) => r.id !== id)
-      await save()
+      const records = await load();
+      cache = records.filter((r) => r.id !== id);
+      await save();
     },
-  }
+  };
 
-  return store
+  return store;
+}
+
+export async function exportShortTermMemory(targetPath: string): Promise<void> {
+  const records = await fs.readFile(storePath(), "utf8").catch(() => "[]\n");
+  await fs.mkdir(path.dirname(targetPath), { recursive: true });
+  await fs.writeFile(targetPath, records, "utf8");
+}
+
+export async function importShortTermMemory(
+  sourcePath: string,
+  store?: MemoryStore,
+): Promise<MemoryRecord[]> {
+  const raw = await fs.readFile(sourcePath, "utf8");
+  const records = JSON.parse(raw) as MemoryRecord[];
+  const target = store ?? createShortTermMemory();
+  const current = await target.list();
+  const existingKeys = new Set(
+    current.map((r) => `${r.key}:${r.worktree ?? ""}:${r.content}`),
+  );
+  const imported: MemoryRecord[] = [];
+  for (const record of records) {
+    if (
+      !existingKeys.has(
+        `${record.key}:${record.worktree ?? ""}:${record.content}`,
+      )
+    ) {
+      imported.push(await target.append(record));
+    }
+  }
+  return imported;
 }

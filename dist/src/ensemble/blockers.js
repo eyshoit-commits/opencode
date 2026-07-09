@@ -1,6 +1,7 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as os from "node:os";
+import { createRatSession } from "./rat.js";
 const BLOCKERS_DIR = path.join(os.homedir(), ".local", "share", "opencode", "blockers");
 function makeId() {
     return `blk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -55,4 +56,17 @@ export async function listBlockers(status) {
 }
 export function shouldStartRat(blocker) {
     return blocker.status === "open" && blocker.severity !== "low";
+}
+export async function autoStartRatForBlocker(blocker, agents) {
+    if (!shouldStartRat(blocker))
+        return blocker;
+    const session = await createRatSession({
+        blockerId: blocker.id,
+        topic: blocker.description,
+        agents,
+    });
+    return updateBlocker(blocker.id, {
+        status: "in_vote",
+        ratSessionId: session.id,
+    });
 }

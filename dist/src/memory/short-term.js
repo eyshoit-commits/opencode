@@ -62,7 +62,8 @@ export function createShortTermMemory() {
             }
             if (query?.search) {
                 const q = query.search.toLowerCase();
-                records = records.filter((r) => r.content.toLowerCase().includes(q) || r.key.toLowerCase().includes(q));
+                records = records.filter((r) => r.content.toLowerCase().includes(q) ||
+                    r.key.toLowerCase().includes(q));
             }
             const offset = query?.offset ?? 0;
             const limit = query?.limit ?? 50;
@@ -78,4 +79,23 @@ export function createShortTermMemory() {
         },
     };
     return store;
+}
+export async function exportShortTermMemory(targetPath) {
+    const records = await fs.readFile(storePath(), "utf8").catch(() => "[]\n");
+    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+    await fs.writeFile(targetPath, records, "utf8");
+}
+export async function importShortTermMemory(sourcePath, store) {
+    const raw = await fs.readFile(sourcePath, "utf8");
+    const records = JSON.parse(raw);
+    const target = store ?? createShortTermMemory();
+    const current = await target.list();
+    const existingKeys = new Set(current.map((r) => `${r.key}:${r.worktree ?? ""}:${r.content}`));
+    const imported = [];
+    for (const record of records) {
+        if (!existingKeys.has(`${record.key}:${record.worktree ?? ""}:${record.content}`)) {
+            imported.push(await target.append(record));
+        }
+    }
+    return imported;
 }

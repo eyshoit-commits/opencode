@@ -1,7 +1,7 @@
 import * as fs from "node:fs/promises"
 import * as os from "node:os"
 import * as path from "node:path"
-import type { PluginRuntimeState } from "./types"
+import type { PluginRuntimeState } from "./types.js"
 
 export function runtimeRoot(): string {
   return process.env.BKG_OC_PLUGIN_STATE_DIR ?? path.join(os.homedir(), ".local", "share", "bkg-oc-plugin-stop-4uck-m3-agen1s")

@@ -2,17 +2,27 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as os from "node:os";
 const VOTES_DIR = path.join(os.homedir(), ".local", "share", "opencode", "votes");
+const APPROVALS_DIR = path.join(os.homedir(), ".local", "share", "opencode", "user-approvals");
 function makeId() {
     return `vote-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 function now() {
     return new Date().toISOString();
 }
-async function ensureDir() {
+async function ensureVotesDir() {
     await fs.mkdir(VOTES_DIR, { recursive: true });
 }
+async function ensureApprovalsDir() {
+    await fs.mkdir(APPROVALS_DIR, { recursive: true });
+}
+function votePath(id) {
+    return path.join(VOTES_DIR, `${id}.json`);
+}
+function approvalPath(id) {
+    return path.join(APPROVALS_DIR, `${id}.json`);
+}
 export async function castVote(input) {
-    await ensureDir();
+    await ensureVotesDir();
     const vote = {
         id: makeId(),
         sessionId: input.sessionId,
@@ -22,11 +32,11 @@ export async function castVote(input) {
         rationale: input.rationale,
         castAt: now(),
     };
-    await fs.writeFile(path.join(VOTES_DIR, `${vote.id}.json`), JSON.stringify(vote, null, 2) + "\n", "utf8");
+    await fs.writeFile(votePath(vote.id), JSON.stringify(vote, null, 2) + "\n", "utf8");
     return vote;
 }
 export async function tallyVotes(ratSessionId) {
-    await ensureDir();
+    await ensureVotesDir();
     const files = await fs.readdir(VOTES_DIR);
     let approve = 0;
     let reject = 0;
@@ -72,7 +82,7 @@ export function determineOutcome(approve, reject, total) {
     return "blocked";
 }
 export async function listVotes(ratSessionId) {
-    await ensureDir();
+    await ensureVotesDir();
     const files = await fs.readdir(VOTES_DIR);
     const votes = [];
     for (const file of files.filter((f) => f.endsWith(".json"))) {
@@ -86,4 +96,37 @@ export async function listVotes(ratSessionId) {
         }
     }
     return votes.sort((a, b) => b.castAt.localeCompare(a.castAt));
+}
+export async function recordUserApproval(input) {
+    await ensureApprovalsDir();
+    const approval = {
+        id: makeId(),
+        ratSessionId: input.ratSessionId,
+        decision: input.decision,
+        context: input.context ?? {},
+        decidedAt: now(),
+        decidedBy: input.decidedBy ?? "user",
+    };
+    await fs.writeFile(approvalPath(approval.id), JSON.stringify(approval, null, 2) + "\n", "utf8");
+    return approval;
+}
+export async function readUserApproval(id) {
+    const raw = await fs.readFile(approvalPath(id), "utf8");
+    return JSON.parse(raw);
+}
+export async function listUserApprovals(ratSessionId) {
+    await ensureApprovalsDir();
+    const files = await fs.readdir(APPROVALS_DIR);
+    const approvals = [];
+    for (const file of files.filter((f) => f.endsWith(".json"))) {
+        try {
+            const a = JSON.parse(await fs.readFile(path.join(APPROVALS_DIR, file), "utf8"));
+            if (!ratSessionId || a.ratSessionId === ratSessionId)
+                approvals.push(a);
+        }
+        catch {
+            // skip damaged records
+        }
+    }
+    return approvals.sort((a, b) => b.decidedAt.localeCompare(a.decidedAt));
 }
