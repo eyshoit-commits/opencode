@@ -1,5 +1,5 @@
 ---
-keywords: ["bkg-zero", "bkg-brain", "bkg-hit", "bkg-some", "bkg-ever", "bkg-fucker", "bkg", "workflow"]
+keywords: ["bkg-project-check", "bkg-memory", "bkg-git", "bkg-tasks", "bkg-rules", "bkg-debate", "bkg", "workflow"]
 match: any
 ---
 
@@ -7,12 +7,12 @@ match: any
 
 Only these six commands are top-level workflow commands:
 
-- `bkg-zero`
-- `bkg-brain`
-- `bkg-hit`
-- `bkg-some`
-- `bkg-ever`
-- `bkg-fucker`
+- `bkg-project-check`
+- `bkg-memory`
+- `bkg-git`
+- `bkg-tasks`
+- `bkg-rules`
+- `bkg-debate`
 
 Everything else must be a subcommand or an OpenCode agent/tool/skill.
 
@@ -24,6 +24,12 @@ Forbidden legacy main commands:
 - `3some`
 - `4ever`
 - `4ucker`
+- `bkg-zero`
+- `bkg-brain`
+- `bkg-hit`
+- `bkg-some`
+- `bkg-ever`
+- `bkg-fucker`
 - `0ro`
 - `brain`
 - `remember`
@@ -39,7 +45,7 @@ Required discipline:
 
 1. Inspect state first.
 2. Add or run a task before work.
-3. Use visible subagents for bkg-fucker debates.
+3. Use visible subagents for bkg-debate debates.
 4. Use vote skills before approval.
 5. Save reports.
 6. Write memory.
