@@ -13,6 +13,19 @@ This plugin exposes six top-level OpenCode commands. Every visible command start
 | `/bkg-rules` | Check workflow rules, done criteria and release gates. | A result looks finished but still needs proof. |
 | `/bkg-debate` | Start team debates, Agent Rat sessions, votes and delegation. | A plan, blocker, feature or approval needs multiple perspectives. |
 
+## Plugin tools behind the commands
+
+The commands can call plugin tools. The important maintenance tools are:
+
+| Tool | Purpose | Mutates files? |
+|---|---|---|
+| `update_check` | Checks pinned plugin refs and returns suggested update prompts. | No |
+| `sync_status` | Shows sync configuration and warnings. | No |
+| `sync_push` | Copies configured OpenCode files into the sync repo, commits and pushes. | Yes, sync repo only |
+| `sync_pull` | Pulls from sync repo and restores configured local files with backups. | Yes, local configured files |
+
+`update_check` is intentionally read-only. It should ask/surface the update question, not silently rewrite config.
+
 ## Command discipline
 
 These commands are the only top-level workflow commands. Everything else must stay a subcommand, skill, tool or agent action.
@@ -53,5 +66,7 @@ After pulling the repository:
 2. Restart OpenCode.
 3. Open `/` command search.
 4. Confirm only the six current top-level BKG commands are visible.
+5. Run or ask an agent to run `update_check` if you want update prompts.
+6. Run `sync_status` before any sync push/pull.
 
 If legacy commands still appear, the local OpenCode config likely still contains stale copied command files. Remove the old command files from the local OpenCode commands directory and reinstall assets.
