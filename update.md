@@ -6,6 +6,19 @@ Stand: 2026-07-09
 
 Das Repo bleibt öffentlich sichtbar und arbeitsfähig. Es wird nicht wieder versteckt oder privat gemacht. Private Altlasten werden sauber entschärft, ohne den produktiven Workflow zu blockieren.
 
+## Neue Doku-Lage
+
+Relevante Einstiegsdokumente:
+
+- `README.md` — Überblick und Links
+- `docs/commands.md` — aktuelle Slash-Commands
+- `docs/install.md` — Installation, `postinstall`, lokale Prüfung
+- `docs/plugin-ready-plan.md` — Architektur und Runtime-Flows
+- `docs/tasks.md` — produktive Task-Liste
+- `docs/release-readiness.md` — private und öffentliche Release-Gates
+- `docs/agent-lane-prompts.md` — Agent-Aufträge
+- `docs/agent-work-contract.md` — Agent-Regeln
+
 ## Command-Namensregel
 
 Alle sichtbaren OpenCode-Commands sollen mit `bkg-` beginnen und klar sagen, was sie tun. Keine Zahlencodes, keine Insider-Witze, keine doppeldeutigen Kurzformen. Menschen haben schon genug Probleme mit Benennung, da muss die Maschine nicht auch noch mitmachen.
@@ -47,6 +60,7 @@ Erledigt als Hauptmodell:
 - alte `/0ero`, `/1brain`, `/2hit`, `/3some`, `/4ever`, `/4ucker` entfernt
 - kurze Zwischenformen `/bkg-zero`, `/bkg-brain`, `/bkg-hit`, `/bkg-some`, `/bkg-ever`, `/bkg-fucker` entfernt
 - neue sprechende Commands in README, Rules, Orchestrator und Installer eingetragen
+- Command-Referenz in `docs/commands.md` ergänzt
 
 ### 3. README ehrlich halten
 
@@ -55,7 +69,9 @@ Erledigt für den aktuellen Stand:
 - Approve, reject und revise sind aktuelle Review-Gate-Funktionen
 - Annotationen sind als geplant markiert, solange keine echte Annotation-API/Implementierung vorhanden ist
 
-### 4. Postinstall bewusst halten
+### 4. Install-Doku und Postinstall bewusst halten
+
+Ergänzt in `docs/install.md` und `docs/release-readiness.md`.
 
 Für private Nutzung darf `postinstall` die Assets automatisch installieren und `opencode.json` aktualisieren.
 
@@ -72,6 +88,7 @@ Nach Änderungen muss mindestens laufen:
 - `npm run ci`
 - `npm ls --depth=0`
 - `git diff --check`
+- lokaler OpenCode-Neustart mit `/` Command-Prüfung
 
 ## Arbeitsmodus ab jetzt
 
