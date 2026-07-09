@@ -57,6 +57,47 @@ For public npm release, this must be reviewed because install scripts that mutat
 - gate it behind an environment variable
 - replace it with a notice and require explicit `npm run install:assets`
 
+## Update checks
+
+The plugin now exposes an `update_check` tool.
+
+What it does:
+
+- reads local OpenCode config from `opencode.json` and `opencode.jsonc`
+- parses pinned plugin refs such as `some-plugin@1.2.3`
+- checks npm packages with `npm view`
+- checks GitHub git refs through semver tags
+- returns suggested prompts like `Update package from current to latest?`
+- writes an update cache under the BKG plugin state directory
+
+What it does not do:
+
+- it does not silently edit `opencode.json`
+- it does not auto-update plugins
+- it does not ask the user unless an agent/tool flow calls `update_check` and surfaces the prompt
+
+Reason: config mutation must stay explicit. Silent auto-updates are how tools become haunted furniture.
+
+## Sync behavior
+
+The plugin exposes these sync tools:
+
+- `sync_status`
+- `sync_push`
+- `sync_pull`
+
+Sync only works when a sync repository is configured through environment variables.
+
+Important environment variables:
+
+- `BKG_OPENCODE_SYNC_REPO`
+- `BKG_OPENCODE_SYNC_BRANCH`
+- `BKG_OPENCODE_SYNC_LOCAL_PATH`
+
+Without `BKG_OPENCODE_SYNC_REPO`, sync can build status and manifests, but it cannot push or pull from a remote repository.
+
+Sync does not automatically run on every startup. It must be called by an agent/tool flow so the user can see what changes are moving.
+
 ## State directory
 
 Runtime state defaults to:
