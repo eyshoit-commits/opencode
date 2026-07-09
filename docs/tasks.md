@@ -2,13 +2,11 @@
 
 ## Arbeitsmodus
 
-Die Arbeit kann parallel von mehreren Agents erledigt werden. Jeder Agent bekommt eine Lane mit klaren Dateien, Akzeptanzkriterien und Grenzen.
+Das Repo bleibt öffentlich sichtbar und wird nicht wieder versteckt oder privat gemacht. Private Nutzung ist erlaubt, aber die Struktur muss trotzdem sauber bleiben.
 
-Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir wieder Architektur-Konfetti und alle tun überrascht.
+Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir wieder Architektur-Konfetti und alle tun überrascht.
 
 ## Aktueller Produktionsstand
-
-Das Repo bleibt öffentlich sichtbar und wird nicht wieder versteckt oder privat gemacht. Private Nutzung ist erlaubt, aber die Struktur muss trotzdem sauber bleiben.
 
 Aktueller Hauptzweck:
 
@@ -20,18 +18,18 @@ Aktueller Hauptzweck:
 
 ## Command-Standard
 
-Alle sichtbaren Hauptcommands beginnen mit `bkg-`, damit sie unter `/` zusammenhängend auffindbar sind.
+Alle sichtbaren Hauptcommands beginnen mit `bkg-` und sagen klar, was sie tun. Keine Zahlencodes, keine Insider-Witze, keine doppeldeutigen Kurzformen.
 
 Aktuelle Hauptcommands:
 
-- `/bkg-zero`
-- `/bkg-brain`
-- `/bkg-hit`
-- `/bkg-some`
-- `/bkg-ever`
-- `/bkg-fucker`
+- `/bkg-project-check` — Projekt, Repo, Docs und Startkontext prüfen
+- `/bkg-memory` — Memory lesen, schreiben und validieren
+- `/bkg-git` — Git-Status, Pull, Commit und Push bewusst ausführen
+- `/bkg-tasks` — Tasks anlegen, anzeigen, starten und aktualisieren
+- `/bkg-rules` — Workflow-Regeln, Done-Kriterien und Release-Gates prüfen
+- `/bkg-debate` — Team-Debatten, Rat-Sessions, Votes und Delegation starten
 
-Legacy-Hauptcommands wie `/0ero`, `/1brain`, `/2hit`, `/3some`, `/4ever` und `/4ucker` werden nicht mehr als primäre Commands geführt.
+Legacy-Hauptcommands wie `/0ero`, `/1brain`, `/2hit`, `/3some`, `/4ever`, `/4ucker`, `/bkg-zero`, `/bkg-brain`, `/bkg-hit`, `/bkg-some`, `/bkg-ever` und `/bkg-fucker` werden nicht mehr als primäre Commands geführt.
 
 ## Lane 0 — Repo hygiene / baseline
 
@@ -45,6 +43,7 @@ Legacy-Hauptcommands wie `/0ero`, `/1brain`, `/2hit`, `/3some`, `/4ever` und `/4
 - `README.md`
 - `.gitignore`
 - `.github/workflows/ci.yml`
+- `update.md`
 
 **Tasks:**
 
@@ -52,9 +51,10 @@ Legacy-Hauptcommands wie `/0ero`, `/1brain`, `/2hit`, `/3some`, `/4ever` und `/4
 - [x] `npm run typecheck` sichergestellt
 - [x] CI für typecheck hinzugefügt
 - [x] README auf plugin-ready Ziel aktualisiert
-- [x] Lizenz/Attribution geprüft (MIT, copyright 2026 eysho.dev)
+- [x] Lizenz/Attribution geprüft
 - [x] Runtime-State-Pfad auf neuen Paketnamen korrigiert
 - [x] `update.md` als produktiver Update-Plan angelegt
+- [x] README auf sprechende Commands aktualisiert
 
 **Done wenn:**
 
@@ -64,276 +64,133 @@ Legacy-Hauptcommands wie `/0ero`, `/1brain`, `/2hit`, `/3some`, `/4ever` und `/4
 
 ## Lane 1 — Rules Loader
 
-**Quelle:** `frap129/opencode-rules`
-
 **Ziel:** BKG Rules Loader, der Rules aus `assets/opencode/rules` lädt und für OpenCode installierbar macht.
-
-**Files:**
-
-- `src/rules-loader.ts`
-- `assets/opencode/rules/bkg-six-main.mdc`
-- `assets/opencode/rules/bkg-rat-vote.mdc`
-- `assets/opencode/rules/bkg-blocker-dashboard.mdc`
 
 **Tasks:**
 
 - [x] Rule discovery für `.mdc` Dateien
 - [x] Rule metadata parser
-- [x] Install/copy helper (rekursiv mit Unterverzeichnissen)
+- [x] Install/copy helper
 - [x] Rule validation
-- [x] Tests (`tests/rules-loader.test.ts`, 13 Tests)
-- [x] Six-main-Regel auf `bkg-*` Commands normalisiert
-
-**Done wenn:**
-
-- Rules werden gefunden, validiert und installierbar gemacht.
-- Missing/invalid rules erzeugen klare Fehler.
-- `npm run test` läuft grün für rules-loader.
+- [x] Tests (`tests/rules-loader.test.ts`)
+- [x] Six-main-Regel auf sprechende Commands aktualisiert
 
 ## Lane 2 — Agent Identity + Personality
 
-**Quellen:**
-
-- `gotgenes/opencode-agent-identity`
-- `joostvanwollingen/opencode-personality`
-
 **Ziel:** Jeder Agent hat Identität, Rolle, Stimme, Personality und Tool-Grenzen.
-
-**Files:**
-
-- `src/identity.ts`
-- `src/personality.ts`
-- `assets/opencode/agents/*.md`
 
 **Tasks:**
 
-- [x] Identity schema definiert (`src/identity.ts`, `src/personality.ts`)
-- [x] Profile für Builder/Reviewer/Product/Rat/Vote Agents in `assets/opencode/agents/*.md`
-- [x] Personality-Presets definiert (orchestrator, builder, reviewer, product, architect, growth, contrarian, chair, recorder, auditor)
-- [x] Tool scopes dokumentiert in Agent-Markdown-Files
+- [x] Identity schema definiert
+- [x] Profile für Builder/Reviewer/Product/Rat/Vote Agents
+- [x] Personality-Presets definiert
+- [x] Tool scopes dokumentiert
 - [x] Export `createIdentityRegistry()` und `getPersonality()`
-- [x] Six-main-Orchestrator auf `bkg-*` Commands aktualisiert
-
-**Done wenn:**
-
-- Agentenprofile maschinenlesbar sind.
-- Orchestrator kann Identity abrufen.
-- `npm run test` läuft grün für personality.
+- [x] Six-main-Orchestrator auf sprechende Commands aktualisiert
 
 ## Lane 3 — Memory Core
 
-**Quellen:**
-
-- `supermemoryai/opencode-supermemory`
-- `andrejtonev/opencode-short-term-memory`
-- `Edison-A-N/opencode-worktree-memory-sync`
-
 **Ziel:** Lokales Short-Term Memory plus optional externe Memory/Recall-Anbindung.
-
-**Files:**
-
-- `src/memory/short-term.ts`
-- `src/memory/worktree-sync.ts`
-- `src/memory/recall.ts`
-- `src/memory/types.ts`
 
 **Tasks:**
 
-- [x] Memory record schema (`src/memory/types.ts`)
-- [x] append/read/list/search (`src/memory/short-term.ts`)
-- [x] worktree keying (`src/memory/worktree-sync.ts`)
-- [x] export/import sync (`exportShortTermMemory`, `importShortTermMemory`)
-- [x] optional external recall adapter placeholder (`src/memory/recall.ts`)
-
-**Done wenn:**
-
-- Memory funktioniert lokal ohne externen Dienst.
-- Worktree-getrennte Memories sind möglich.
-- Externe Recall-API kann später angeschlossen werden.
-- `npm run test` läuft grün für memory-short-term und memory-worktree-sync.
+- [x] Memory record schema
+- [x] append/read/list/search
+- [x] worktree keying
+- [x] export/import sync
+- [x] optional external recall adapter placeholder
 
 ## Lane 4 — Background Delegation + Subtasks
 
-**Quellen:**
-
-- `kdcokenny/opencode-background-agents`
-- `spoons-and-mirrors/subtask2`
-- `kdcokenny/ocx`
-
 **Ziel:** Delegations-API mit persistenten Artefakten und Subtask-Zerlegung.
-
-**Files:**
-
-- `src/background-agents.ts`
-- `src/subagents/delegation.ts`
-- `src/subagents/subtasks.ts`
-- `src/subagents/output-capture.ts`
 
 **Tasks:**
 
-- [x] Existing delegation shim refactored (`src/subagents/delegation.ts`)
-- [x] Subtask schema (`src/subagents/subtasks.ts`)
-- [x] `delegate()` tool stabilisiert (`src/background-agents.ts`)
+- [x] Existing delegation shim refactored
+- [x] Subtask schema
+- [x] `delegate()` tool stabilisiert
 - [x] `delegation_read()` und `delegation_list()` verbessert
-- [x] Output capture per agent/run (`src/subagents/output-capture.ts`)
-
-**Done wenn:**
-
-- Delegation erzeugt stabile IDs und Artefakte.
-- Subtasks können gespeichert und gelesen werden.
-- Subagent Output kann in Reports übernommen werden.
-- `npm run test` läuft grün für delegation-integration.
+- [x] Output capture per agent/run
 
 ## Lane 5 — Ensemble / Agent Rat / Votes
 
-**Quellen:**
-
-- `hueyexe/opencode-ensemble`
-- bisherige BKG Agent Rat/Vote Struktur
-
 **Ziel:** Rat startet bei Planung, Features und Blockern automatisch.
-
-**Files:**
-
-- `src/ensemble/rat.ts`
-- `src/ensemble/votes.ts`
-- `src/ensemble/blockers.ts`
-- `assets/opencode/skills/agent-rat/SKILL.md`
-- `assets/opencode/skills/vote-core/SKILL.md`
 
 **Tasks:**
 
-- [x] Rat session schema (`src/ensemble/rat.ts`)
-- [x] blocker -> rat autostart (`src/ensemble/blockers.ts`, `shouldStartRat`, `autoStartRatForBlocker`)
-- [x] vote table schema (`src/ensemble/votes.ts`)
-- [x] approval threshold rules (`determineOutcome`: majority of non-abstaining votes)
-- [x] user approval state (`recordUserApproval`, `listUserApprovals`)
-- [x] fourth voice slot (`setFourthVoice`, `/api/fourth-voice/request`)
-
-**Done wenn:**
-
-- Blocker kann Rat-Session starten.
-- Vote result kann `approved`, `rejected`, `revise`, `blocked` sein.
-- Fourth voice kann als externe API-Stimme ergänzt werden.
-- `npm run test` läuft grün für ensemble-rat und ensemble-votes.
+- [x] Rat session schema
+- [x] blocker -> rat autostart
+- [x] vote table schema
+- [x] approval threshold rules
+- [x] user approval state
+- [x] fourth voice slot
 
 ## Lane 6 — Dashboard / Visualiser / Approval Gate
 
-**Quellen:**
-
-- `psinetron/opencode-visualiser`
-- bisherige Live Debate Dashboard Idee
-
 **Ziel:** Dashboard öffnet/aktualisiert bei Fragen oder Blockern; User kann Approve/Reject/Revise klicken.
-
-**Files:**
-
-- `src/dashboard/server.ts`
-- `src/dashboard/state.ts`
-- `src/dashboard/api.ts`
-- `src/dashboard/static/index.html`
-- `src/dashboard/static/app.js`
-- `src/dashboard/static/style.css`
 
 **Tasks:**
 
-- [x] HTTP server (`src/dashboard/server.ts`)
+- [x] HTTP server
 - [x] `/api/state` und `/api/summary`
 - [x] `/api/blocker`
 - [x] `/api/rat/start`
 - [x] `/api/vote` und `/api/vote/tally`
 - [x] `/api/user/approve`, `/api/user/reject`, `/api/user/revise`
-- [x] browser UI (`src/dashboard/static/index.html`, `app.js`, `style.css`)
+- [x] browser UI
 - [x] README auf approve/reject/revise korrigiert; Annotationen als geplant markiert
-
-**Done wenn:**
-
-- Dashboard zeigt Blocker, Agenten, Votes, Reports.
-- User kann approve/reject/revise klicken.
-- State wird persistiert.
-- `npm run test` läuft grün für dashboard-api.
 
 ## Lane 7 — TTS / Vorlesen
 
-**Quelle:** `StefanoChiodino/opencode-tts`
-
 **Ziel:** Dashboard kann aktuellen Blocker, Rat-Summary oder Vote vorlesen.
-
-**Files:**
-
-- `src/dashboard/tts.ts`
-- `src/dashboard/static/app.js`
 
 **Tasks:**
 
-- [x] Browser SpeechSynthesis fallback (`src/dashboard/tts.ts`, `createTtsResponse`)
-- [x] optional TTS backend endpoint (`/api/tts/read`)
-- [x] Button im Dashboard ("Vorlesen" in `index.html` und `app.js`)
-
-**Done wenn:**
-
-- Klick auf "Vorlesen" liest aktuelle Zusammenfassung vor.
-- Kein externer Dienst zwingend erforderlich.
+- [x] Browser SpeechSynthesis fallback
+- [x] optional TTS backend endpoint
+- [x] Button im Dashboard
 
 ## Lane 8 — BitShit Adapter
 
 **Ziel:** stabile API, die BitShit später nutzen kann.
 
-**Files:**
-
-- `src/bitshit/adapter.ts`
-- `src/bitshit/types.ts`
-
 **Tasks:**
 
-- [x] Adapter Interface (`src/bitshit/types.ts`, `BitshitControlAdapter`)
-- [x] `reportBlocker` (via `createRuntimeBitshitAdapter`)
-- [x] `startRat` (via `createRuntimeBitshitAdapter`)
-- [x] `recordVote` (via `createRuntimeBitshitAdapter`)
-- [x] `requestApproval` (via `createRuntimeBitshitAdapter`)
-- [x] `remember` (via `createRuntimeBitshitAdapter`)
-
-**Done wenn:**
-
-- BitShit kann gegen Types kompilieren.
-- Adapter ist unabhängig vom OpenCode-Asset-Installer.
-- `npm run test` läuft grün für bitshit-adapter und bitshit-runtime-adapter.
+- [x] Adapter Interface
+- [x] `reportBlocker`
+- [x] `startRat`
+- [x] `recordVote`
+- [x] `requestApproval`
+- [x] `remember`
 
 ## Lane 9 — Assets completion
 
 **Ziel:** Alle OpenCode Assets vollständig im Repo.
 
-**Files:**
-
-- `assets/opencode/commands/`
-- `assets/opencode/agents/`
-- `assets/opencode/skills/`
-- `assets/opencode/rules/`
-
 **Tasks:**
 
-- [x] Six commands auf `bkg-*` normalisiert (`bkg-zero`, `bkg-brain`, `bkg-hit`, `bkg-some`, `bkg-ever`, `bkg-fucker`)
+- [x] Six commands auf klare Namen normalisiert: `bkg-project-check`, `bkg-memory`, `bkg-git`, `bkg-tasks`, `bkg-rules`, `bkg-debate`
 - [x] Legacy-Zahlencommands aus `assets/opencode/commands/` entfernt
-- [x] Orchestrator agent (`bkg-orchestrator.md`, `bkg-six-main-orchestrator.md`)
-- [x] 4ucker team agents (`bkg-4ucker-builder.md`, `bkg-4ucker-product.md`, `bkg-4ucker-reviewer.md`)
-- [x] Rat agents (`bkg-rat-architect.md`, `bkg-rat-builder.md`, `bkg-rat-contrarian.md`, `bkg-rat-growth.md`, `bkg-rat-product.md`, `bkg-rat-reviewer.md`)
-- [x] Vote agents (`bkg-vote-chair.md`, `bkg-vote-recorder.md`, `bkg-vote-auditor.md`)
-- [x] Skills vollständig (`4ucker-builder`, `4ucker-debate`, `4ucker-product`, `4ucker-reviewer`, `agent-rat`, `bkg-six-main-flow`, `vote-core`, `vote-council`, `vote-post`, `vote-release`, `vote-team`)
-- [x] Rules vollständig (`bkg-six-main.mdc`, `bkg-rat-vote.mdc`, `bkg-blocker-dashboard.mdc`, `bkg-visible-agents-and-vote.mdc`)
-
-**Done wenn:**
-
-- `npm run install:assets` installiert ein vollständiges OpenCode Pack.
-- `opencode.json` wird automatisch aktualisiert (Plugin-Referenz, Agenten, Skills, Permissions).
+- [x] Kurze halbdeutige Zwischencommands aus `assets/opencode/commands/` entfernt
+- [x] Orchestrator agent aktualisiert
+- [x] Rules aktualisiert
+- [x] Installer-Permissions aktualisiert
+- [x] 4ucker team agents vorhanden
+- [x] Rat agents vorhanden
+- [x] Vote agents vorhanden
+- [x] Skills vorhanden
 
 ## Jetzt produktiv weiterarbeiten
 
 **Sofort nächste Tasks:**
 
+- [ ] Lokal ziehen: `git pull`
+- [ ] Assets neu installieren: `npm run install:assets`
+- [ ] OpenCode neu starten
+- [ ] Unter `/` prüfen, ob nur die neuen sprechenden Commands sichtbar sind
 - [ ] CI auf aktuellem Head laufen lassen: `npm run ci`
 - [ ] Dependency-Baum prüfen: `npm ls --depth=0`
 - [ ] Whitespace/Format prüfen: `git diff --check`
-- [ ] Lokal OpenCode neu starten und prüfen, ob `/bkg-` Commands sichtbar sind
 - [ ] Falls `postinstall` für öffentliche Nutzung zu aggressiv ist: Env-Gate oder Notice nachziehen
 - [ ] Annotationen entweder implementieren oder weiter klar als geplant führen
 - [ ] Danach Version-Bump vorbereiten
