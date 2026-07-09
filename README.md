@@ -52,7 +52,7 @@ dashboard/review-gate settings, and ACP limitations, see
 - **Agent Rat**: escalate blockers into structured multi-agent review.
 - **Vote engine**: record approve, reject, abstain and tally decisions.
 - **Dashboard**: local HTTP UI for blockers, Rat sessions, votes, memory, TTS and fourth-voice requests.
-- **Review gate**: Plannotator-inspired local browser approval flow supports approve, reject, revise, and annotations for blocker and Rat decisions.
+- **Review gate**: Plannotator-inspired local browser approval flow supports approve, reject and revise for blocker and Rat decisions. Annotation support is planned.
 - **Conclave model**: Captain plus Facts, Logic and Alternative perspectives with consensus threshold support.
 - **Sync manifest**: OpenCode config, skills, agents, model favorites and BKG plugin state path planning inspired by opencode-synced.
 - **Update notifier parser**: detects pinned plugin refs so updates can be surfaced without auto-updating.
@@ -69,12 +69,12 @@ npm run install:assets
 The BKG six-main command model is:
 
 ```text
-/0ero
-/1brain
-/2hit
-/3some
-/4ever
-/4ucker
+/bkg-zero
+/bkg-brain
+/bkg-hit
+/bkg-some
+/bkg-ever
+/bkg-fucker
 ```
 
 Everything else should remain a subcommand, skill, rule or internal tool. Humans keep inventing menu sprawl; this repo tries not to join them.
@@ -196,6 +196,7 @@ The current test suite is intentionally small and contract-focused:
 - update-notifier pinned plugin parsing
 - Conclave session early-stop behavior
 - BitShit runtime adapter smoke contract
+- Dashboard API smoke and validation coverage
 
 More integration tests should be added as the dashboard review gate becomes executable.
 
