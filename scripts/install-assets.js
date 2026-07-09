@@ -21,10 +21,30 @@ async function copyDir(src, dst) {
   }
 }
 
+function parseFrontmatter(content) {
+  const firstSep = content.indexOf("---");
+  if (firstSep !== 0) return { _body: content.trim() };
+  const secondSep = content.indexOf("---", 3);
+  if (secondSep === -1) return { _body: content.trim() };
+  const raw = content.slice(3, secondSep).trim();
+  const result = {};
+  const lines = raw.split("\n");
+  for (const line of lines) {
+    const m = line.match(/^(\w[\w-]*):\s*(.*)$/);
+    if (m) {
+      result[m[1]] = m[2].trim();
+    }
+  }
+  result._body = content.slice(secondSep + 3).trim();
+  return result;
+}
+
 async function updateOpenCodeJson() {
   try {
     const raw = await fs.readFile(opencodeJsonPath, "utf8");
     const config = JSON.parse(raw);
+
+    // Update plugin reference
     const pluginRef = `file://${pluginPath}`;
     const plugins = Array.isArray(config.plugin) ? config.plugin : [];
     const hasPlugin = plugins.some((p) => {
@@ -35,11 +55,67 @@ async function updateOpenCodeJson() {
     if (!hasPlugin) {
       plugins.push(pluginRef);
       config.plugin = plugins;
-      await fs.writeFile(opencodeJsonPath, JSON.stringify(config, null, 2) + "\n", "utf8");
-      console.log(`Updated ${opencodeJsonPath} with plugin reference: ${pluginRef}`);
-    } else {
-      console.log(`Plugin reference already present in ${opencodeJsonPath}`);
     }
+
+    // Register agents
+    const agentsDir = path.join(target, "agents");
+    config.agent = config.agent || {};
+    try {
+      const agentFiles = await fs.readdir(agentsDir);
+      for (const file of agentFiles.filter((f) => f.endsWith(".md"))) {
+        const agentId = path.basename(file, ".md");
+        const content = await fs.readFile(path.join(agentsDir, file), "utf8");
+        const fm = parseFrontmatter(content);
+        if (!config.agent[agentId]) {
+          config.agent[agentId] = {
+            description: fm.description || `Agent ${agentId}`,
+            mode: fm.mode || "subagent",
+            temperature: typeof fm.temperature === "number" ? fm.temperature : 0.2,
+          };
+        }
+      }
+    } catch (error) {
+      console.warn("Could not register agents:", error.message);
+    }
+
+    // Register skills
+    const skillsDir = path.join(target, "skills");
+    config.skill = config.skill || {};
+    try {
+      const skillDirs = await fs.readdir(skillsDir);
+      for (const skillDir of skillDirs) {
+        const skillPath = path.join(skillsDir, skillDir);
+        try {
+          const stat = await fs.stat(skillPath);
+          if (stat.isDirectory()) {
+            config.skill[skillDir] = {
+              path: skillPath,
+            };
+          }
+        } catch {}
+      }
+    } catch (error) {
+      console.warn("Could not register skills:", error.message);
+    }
+
+    // Add permissions for BKG tools
+    config.permission = config.permission || {};
+    config.permission.bash = config.permission.bash || {};
+    const bashRules = config.permission.bash;
+    const bkgCommands = [
+      "./0ero*", "./1brain*", "./2hit*", "./3some*", "./4ever*", "./4ucker*",
+      "npm run typecheck*", "npm run test*", "npm run build*", "npm run ci*",
+      "npm run install:assets*", "npm run dashboard:start*",
+      "node scripts/install-assets.js*", "tsx scripts/install-assets.ts*",
+    ];
+    for (const cmd of bkgCommands) {
+      if (!bashRules[cmd]) {
+        bashRules[cmd] = "allow";
+      }
+    }
+
+    await fs.writeFile(opencodeJsonPath, JSON.stringify(config, null, 2) + "\n", "utf8");
+    console.log(`Updated ${opencodeJsonPath}`);
   } catch (error) {
     console.error("Failed to update opencode.json:", error);
   }

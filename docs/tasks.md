@@ -22,10 +22,10 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 **Tasks:**
 
 - [x] Package name geprüft: `bkg-oc-plugin-bkg-dfma`
-- [ ] `npm run typecheck` sicherstellen
-- [ ] CI für typecheck hinzufügen
-- [ ] README auf plugin-ready Ziel aktualisieren
-- [ ] Lizenz/Attribution prüfen
+- [x] `npm run typecheck` sicherstellen
+- [x] CI für typecheck hinzufügen
+- [x] README auf plugin-ready Ziel aktualisiert
+- [x] Lizenz/Attribution geprüft (MIT, copyright 2026 eysho.dev)
 
 **Done wenn:**
 
@@ -48,16 +48,17 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Rule discovery für `.mdc` Dateien
-- [ ] Rule metadata parser
-- [ ] Install/copy helper
-- [ ] Rule validation
-- [ ] Tests oder minimaler validation script
+- [x] Rule discovery für `.mdc` Dateien
+- [x] Rule metadata parser
+- [x] Install/copy helper (rekursiv mit Unterverzeichnissen)
+- [x] Rule validation
+- [x] Tests (`tests/rules-loader.test.ts`, 13 Tests)
 
 **Done wenn:**
 
 - Rules werden gefunden, validiert und installierbar gemacht.
 - Missing/invalid rules erzeugen klare Fehler.
+- `npm run test` läuft grün für rules-loader.
 
 ## Lane 2 — Agent Identity + Personality
 
@@ -76,16 +77,17 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Identity schema definieren
-- [ ] Profile für Builder/Reviewer/Product/Rat/Vote Agents
-- [ ] Personality-Presets definieren
-- [ ] Tool scopes dokumentieren
-- [ ] Export `getAgentIdentity(name)`
+- [x] Identity schema definiert (`src/identity.ts`, `src/personality.ts`)
+- [x] Profile für Builder/Reviewer/Product/Rat/Vote Agents in `assets/opencode/agents/*.md`
+- [x] Personality-Presets definiert (orchestrator, builder, reviewer, product, architect, growth, contrarian, chair, recorder, auditor)
+- [x] Tool scopes dokumentiert in Agent-Markdown-Files
+- [x] Export `createIdentityRegistry()` und `getPersonality()`
 
 **Done wenn:**
 
 - Agentenprofile maschinenlesbar sind.
 - Orchestrator kann Identity abrufen.
+- `npm run test` läuft grün für personality.
 
 ## Lane 3 — Memory Core
 
@@ -106,17 +108,18 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Memory record schema
-- [ ] append/read/list/search
-- [ ] worktree keying
-- [ ] export/import sync
-- [ ] optional external recall adapter placeholder
+- [x] Memory record schema (`src/memory/types.ts`)
+- [x] append/read/list/search (`src/memory/short-term.ts`)
+- [x] worktree keying (`src/memory/worktree-sync.ts`)
+- [x] export/import sync (`exportShortTermMemory`, `importShortTermMemory`)
+- [x] optional external recall adapter placeholder (`src/memory/recall.ts`)
 
 **Done wenn:**
 
 - Memory funktioniert lokal ohne externen Dienst.
 - Worktree-getrennte Memories sind möglich.
 - Externe Recall-API kann später angeschlossen werden.
+- `npm run test` läuft grün für memory-short-term und memory-worktree-sync.
 
 ## Lane 4 — Background Delegation + Subtasks
 
@@ -137,17 +140,18 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Existing delegation shim refactoren
-- [ ] Subtask schema
-- [ ] `delegate()` tool stabilisieren
-- [ ] `delegation_read()` und `delegation_list()` verbessern
-- [ ] Output capture per agent/run
+- [x] Existing delegation shim refactored (`src/subagents/delegation.ts`)
+- [x] Subtask schema (`src/subagents/subtasks.ts`)
+- [x] `delegate()` tool stabilisiert (`src/background-agents.ts`)
+- [x] `delegation_read()` und `delegation_list()` verbessert
+- [x] Output capture per agent/run (`src/subagents/output-capture.ts`)
 
 **Done wenn:**
 
 - Delegation erzeugt stabile IDs und Artefakte.
 - Subtasks können gespeichert und gelesen werden.
 - Subagent Output kann in Reports übernommen werden.
+- `npm run test` läuft grün für delegation-integration.
 
 ## Lane 5 — Ensemble / Agent Rat / Votes
 
@@ -168,18 +172,19 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Rat session schema
-- [ ] blocker -> rat autostart
-- [ ] vote table schema
-- [ ] approval threshold rules
-- [ ] user approval state
-- [ ] fourth voice slot
+- [x] Rat session schema (`src/ensemble/rat.ts`)
+- [x] blocker -> rat autostart (`src/ensemble/blockers.ts`, `shouldStartRat`, `autoStartRatForBlocker`)
+- [x] vote table schema (`src/ensemble/votes.ts`)
+- [x] approval threshold rules (`determineOutcome`: majority of non-abstaining votes)
+- [x] user approval state (`recordUserApproval`, `listUserApprovals`)
+- [x] fourth voice slot (`setFourthVoice`, `/api/fourth-voice/request`)
 
 **Done wenn:**
 
 - Blocker kann Rat-Session starten.
 - Vote result kann `approved`, `rejected`, `revise`, `blocked` sein.
 - Fourth voice kann als externe API-Stimme ergänzt werden.
+- `npm run test` läuft grün für ensemble-rat und ensemble-votes.
 
 ## Lane 6 — Dashboard / Visualiser / Approval Gate
 
@@ -201,20 +206,20 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] HTTP server
-- [ ] `/api/state`
-- [ ] `/api/blocker`
-- [ ] `/api/rat/start`
-- [ ] `/api/vote`
-- [ ] `/api/user/approve`
-- [ ] `/api/user/reject`
-- [ ] browser UI
+- [x] HTTP server (`src/dashboard/server.ts`)
+- [x] `/api/state` und `/api/summary`
+- [x] `/api/blocker`
+- [x] `/api/rat/start`
+- [x] `/api/vote` und `/api/vote/tally`
+- [x] `/api/user/approve`, `/api/user/reject`, `/api/user/revise`
+- [x] browser UI (`src/dashboard/static/index.html`, `app.js`, `style.css`)
 
 **Done wenn:**
 
 - Dashboard zeigt Blocker, Agenten, Votes, Reports.
 - User kann approve/reject/revise klicken.
 - State wird persistiert.
+- `npm run test` läuft grün für dashboard-api.
 
 ## Lane 7 — TTS / Vorlesen
 
@@ -229,14 +234,13 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Browser SpeechSynthesis fallback
-- [ ] optional TTS backend endpoint
-- [ ] `/api/tts/read`
-- [ ] Button im Dashboard
+- [x] Browser SpeechSynthesis fallback (`src/dashboard/tts.ts`, `createTtsResponse`)
+- [x] optional TTS backend endpoint (`/api/tts/read`)
+- [x] Button im Dashboard ("Vorlesen" in `index.html` und `app.js`)
 
 **Done wenn:**
 
-- Klick auf “Vorlesen” liest aktuelle Zusammenfassung vor.
+- Klick auf "Vorlesen" liest aktuelle Zusammenfassung vor.
 - Kein externer Dienst zwingend erforderlich.
 
 ## Lane 8 — BitShit Adapter
@@ -250,17 +254,18 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Adapter Interface
-- [ ] reportBlocker
-- [ ] startRat
-- [ ] recordVote
-- [ ] requestApproval
-- [ ] remember
+- [x] Adapter Interface (`src/bitshit/types.ts`, `BitshitControlAdapter`)
+- [x] `reportBlocker` (via `createRuntimeBitshitAdapter`)
+- [x] `startRat` (via `createRuntimeBitshitAdapter`)
+- [x] `recordVote` (via `createRuntimeBitshitAdapter`)
+- [x] `requestApproval` (via `createRuntimeBitshitAdapter`)
+- [x] `remember` (via `createRuntimeBitshitAdapter`)
 
 **Done wenn:**
 
 - BitShit kann gegen Types kompilieren.
 - Adapter ist unabhängig vom OpenCode-Asset-Installer.
+- `npm run test` läuft grün für bitshit-adapter und bitshit-runtime-adapter.
 
 ## Lane 9 — Assets completion
 
@@ -275,17 +280,18 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [ ] Alle six commands
-- [ ] Orchestrator agent
-- [ ] 4ucker team agents
-- [ ] Rat agents
-- [ ] Vote agents
-- [ ] Skills vollständig
-- [ ] Rules vollständig
+- [x] Alle six commands (`assets/opencode/commands/0ero.md` bis `4ucker.md`)
+- [x] Orchestrator agent (`bkg-orchestrator.md`, `bkg-six-main-orchestrator.md`)
+- [x] 4ucker team agents (`bkg-4ucker-builder.md`, `bkg-4ucker-product.md`, `bkg-4ucker-reviewer.md`)
+- [x] Rat agents (`bkg-rat-architect.md`, `bkg-rat-builder.md`, `bkg-rat-contrarian.md`, `bkg-rat-growth.md`, `bkg-rat-product.md`, `bkg-rat-reviewer.md`)
+- [x] Vote agents (`bkg-vote-chair.md`, `bkg-vote-recorder.md`, `bkg-vote-auditor.md`)
+- [x] Skills vollständig (`4ucker-builder`, `4ucker-debate`, `4ucker-product`, `4ucker-reviewer`, `agent-rat`, `bkg-six-main-flow`, `vote-core`, `vote-council`, `vote-post`, `vote-release`, `vote-team`)
+- [x] Rules vollständig (`bkg-six-main.mdc`, `bkg-rat-vote.mdc`, `bkg-blocker-dashboard.mdc`, `bkg-visible-agents-and-vote.mdc`)
 
 **Done wenn:**
 
 - `npm run install:assets` installiert ein vollständiges OpenCode Pack.
+- `opencode.json` wird automatisch aktualisiert (Plugin-Referenz, Agenten, Skills, Permissions).
 
 ## Empfehlung: Welche Agents starten?
 
@@ -309,5 +315,5 @@ Starte 5 Agents parallel:
 ## Sofort nächste Aufgabe
 
 ```text
-Implement Lane 0 and Lane 8 first: make the package plugin-ready, add CI, add stable BitShit adapter types, and keep all current plugin tools compiling.
+Alle Lanes sind implementiert. Nächster Schritt: Fourth Voice API an echten externen Dienst anbinden (z.B. OpenAI/Anthropic API für ChatGPT-Reviewer), dann Version bump und npm publish vorbereiten.
 ```
