@@ -4,7 +4,7 @@
 
 `bkg-oc-plugin-bkg-dfma` wird zuerst als eigenständiges OpenCode-Plugin fertig gemacht und danach als wiederverwendbarer Kern für BitShit übernommen.
 
-Das Plugin soll nicht nur Commands und Prompt-Dateien installieren. Es soll eine echte Kontrollschicht liefern:
+Das Plugin soll nicht nur Commands und Prompt-Dateien installieren. Es soll eine echte lokale Kontrollschicht liefern:
 
 - Agent Identity
 - Background Delegation
@@ -15,7 +15,7 @@ Das Plugin soll nicht nur Commands und Prompt-Dateien installieren. Es soll eine
 - Worktree Memory Sync
 - Dashboard / Visualiser
 - Blocker Detection
-- Approve / Reject Gate
+- Approve / Reject / Revise Gate
 - TTS / Vorlesen
 - Fourth Voice API für ChatGPT / externen Reviewer
 
@@ -33,6 +33,19 @@ BitShit braucht später dieselben Fähigkeiten:
 
 Wenn wir das im Plugin sauber bauen, kann BitShit später darauf aufsetzen statt denselben Kram nochmal zu bauen. Software-Wiederverwendung, dieses sagenumwobene Konzept, das Menschen ständig erwähnen und dann ignorieren.
 
+## Aktuelle Hauptcommands
+
+Die sichtbaren Workflow-Commands sind sprechend und beginnen alle mit `bkg-`:
+
+- `/bkg-project-check`
+- `/bkg-memory`
+- `/bkg-git`
+- `/bkg-tasks`
+- `/bkg-rules`
+- `/bkg-debate`
+
+Die genaue Command-Referenz steht in `docs/commands.md`.
+
 ## Quellen und was wir daraus ziehen
 
 | Quelle | Pattern, das wir übernehmen | Kein blindes Vendoring |
@@ -46,7 +59,7 @@ Wenn wir das im Plugin sauber bauen, kann BitShit später darauf aufsetzen statt
 | `gotgenes/opencode-agent-identity` | Agent Identity / Role Metadata | BKG Identity Registry |
 | `hueyexe/opencode-ensemble` | Ensemble-/Rat-Pattern | Agent Rat Orchestration |
 | `raisbecka/opencode-subagent-output` | Subagent Output Capture | Debate/Report Capture |
-| `spoons-and-mirrors/subtask2` | Subtask-Decomposition | 3some/Delegation Tasks |
+| `spoons-and-mirrors/subtask2` | Subtask-Decomposition | task/delegation flow |
 | `StefanoChiodino/opencode-tts` | Vorlesen/TTS | TTS adapter, optional local/server backend |
 | `psinetron/opencode-visualiser` | Dashboard/Visualisierung | BKG dashboard |
 | `joostvanwollingen/opencode-personality` | Agent tone/personality | per-agent personality profiles |
@@ -55,63 +68,43 @@ Wenn wir das im Plugin sauber bauen, kann BitShit später darauf aufsetzen statt
 
 ## Zielarchitektur
 
-```text
-src/
-  index.ts
-  background-agents.ts
-  rules-loader.ts
-  identity.ts
-  memory/
-    short-term.ts
-    worktree-sync.ts
-    recall.ts
-  ensemble/
-    rat.ts
-    votes.ts
-    blockers.ts
-  subagents/
-    output-capture.ts
-    delegation.ts
-  dashboard/
-    server.ts
-    state.ts
-    tts.ts
-    api.ts
-  bitshit/
-    adapter.ts
-assets/opencode/
-  commands/
-  agents/
-  skills/
-  rules/
-docs/
-  plugin-ready-plan.md
-  tasks.md
-```
+Core layout:
+
+- `src/index.ts`
+- `src/background-agents.ts`
+- `src/rules-loader.ts`
+- `src/identity.ts`
+- `src/memory/`
+- `src/ensemble/`
+- `src/subagents/`
+- `src/dashboard/`
+- `src/bitshit/`
+- `assets/opencode/commands/`
+- `assets/opencode/agents/`
+- `assets/opencode/skills/`
+- `assets/opencode/rules/`
+- `docs/`
 
 ## Runtime Flow
 
 ### Normal work
 
-1. `3some add` creates task.
-2. Agent works.
-3. Output capture stores evidence.
-4. `1brain remember` stores result.
-5. `4ever check` validates done claim.
+1. `/bkg-project-check` inspects repository, docs, state and starting context.
+2. `/bkg-tasks` creates or selects a concrete task.
+3. Agent works only inside the claimed scope.
+4. Subagent output capture stores evidence.
+5. `/bkg-rules` validates the done claim.
+6. `/bkg-memory` stores the result, decision and remaining risks.
+7. `/bkg-git` is used for explicit status, commit and push actions.
 
 ### Blocker flow
 
 1. A blocker is detected by tool, agent, test failure, or explicit user message.
-2. Dashboard opens / updates.
-3. Agent Rat starts automatically.
-4. Required agents speak:
-   - Architect
-   - Builder
-   - Reviewer
-   - Product
-   - Contrarian
+2. Dashboard opens or updates.
+3. `/bkg-debate` starts a team debate, Agent Rat session or vote.
+4. Required agents speak with visible positions.
 5. Vote begins.
-6. User approves or rejects in dashboard.
+6. User approves, rejects or requests revision in dashboard/API.
 7. Decision is persisted.
 8. Memory is synced.
 
@@ -129,46 +122,56 @@ Dashboard exposes:
 - Read aloud button
 - API endpoint for fourth reviewer voice
 
+Annotation and line-edit support are planned, not current release behavior.
+
 ## Dashboard endpoints
 
-```text
-GET  /api/state
-POST /api/blocker
-POST /api/rat/start
-POST /api/vote
-POST /api/user/approve
-POST /api/user/reject
-POST /api/tts/read
-POST /api/fourth-voice/request
-```
+Current endpoints:
+
+- `GET /api/state`
+- `GET /api/summary`
+- `GET /api/live-output?after=<sequence>`
+- `POST /api/blocker`
+- `POST /api/rat/start`
+- `POST /api/vote`
+- `POST /api/user/approve`
+- `POST /api/user/reject`
+- `POST /api/user/revise`
+- `GET /api/vote/tally?ratSessionId=...`
+- `POST /api/tts/read`
+- `POST /api/fourth-voice/request`
 
 ## BitShit Adapter
 
-BitShit should later call the plugin layer through a small adapter:
+BitShit should later call the plugin layer through a small adapter with these capabilities:
 
-```ts
-export interface BitshitControlAdapter {
-  reportBlocker(input: BlockerInput): Promise<BlockerRecord>
-  startRat(input: RatInput): Promise<RatSession>
-  recordVote(input: VoteInput): Promise<VoteRecord>
-  requestApproval(input: ApprovalInput): Promise<ApprovalDecision>
-  remember(input: MemoryInput): Promise<void>
-}
-```
+- report blocker
+- start Rat session
+- record vote
+- request approval
+- remember result/context
+
+The compatibility stub must stay deterministic and marked with `isStub: true`.
+
+The runtime adapter must delegate to real local stores.
 
 ## Acceptance Criteria
 
 Plugin-ready means:
 
 - `npm run typecheck` passes.
-- Plugin exposes tools for delegation, memory, rat, vote, blocker, dashboard.
+- `npm test` passes.
+- `npm run ci` passes.
+- Plugin exposes tools for delegation, memory, rat, vote, blocker and dashboard.
 - Assets install with `npm run install:assets`.
 - Dashboard can show blocker and vote state.
-- User can approve/reject through API or UI.
+- User can approve/reject/revise through API or UI.
 - TTS endpoint can read current blocker/rat summary.
 - Subagent output is captured into durable artifacts.
 - Memory can sync per worktree.
 - BitShit adapter exports stable interfaces.
+- Runtime state defaults to `bkg-oc-plugin-bkg-dfma` path.
+- Commands visible under `/` use the explicit `bkg-*` command names from `docs/commands.md`.
 
 ## Build strategy
 
@@ -184,3 +187,13 @@ Use lanes:
 6. Assets + docs + tests
 
 Each lane must ship a concrete commit with files and acceptance notes.
+
+## Next real feature
+
+After the current productive baseline is verified, the next real feature is review-gate annotation support:
+
+- annotation API
+- line-range comments
+- revise feedback payloads
+- dashboard UI for annotations
+- tests proving annotation persistence
