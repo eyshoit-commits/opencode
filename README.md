@@ -66,15 +66,15 @@ The install helper copies packaged OpenCode assets into the user's config direct
 npm run install:assets
 ```
 
-The BKG six-main command model is:
+The BKG six-main command model uses explicit command names:
 
 ```text
-/bkg-zero
-/bkg-brain
-/bkg-hit
-/bkg-some
-/bkg-ever
-/bkg-fucker
+/bkg-project-check
+/bkg-memory
+/bkg-git
+/bkg-tasks
+/bkg-rules
+/bkg-debate
 ```
 
 Everything else should remain a subcommand, skill, rule or internal tool. Humans keep inventing menu sprawl; this repo tries not to join them.
