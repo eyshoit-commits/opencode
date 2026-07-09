@@ -6,9 +6,36 @@ Die Arbeit kann parallel von mehreren Agents erledigt werden. Jeder Agent bekomm
 
 Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir wieder Architektur-Konfetti und alle tun überrascht.
 
+## Aktueller Produktionsstand
+
+Das Repo bleibt öffentlich sichtbar und wird nicht wieder versteckt oder privat gemacht. Private Nutzung ist erlaubt, aber die Struktur muss trotzdem sauber bleiben.
+
+Aktueller Hauptzweck:
+
+- OpenCode-Assets installieren
+- `opencode.json` mit Plugin-Referenz aktualisieren
+- lokale Agent-Kontrollschicht bereitstellen
+- Dashboard, Blocker, Rat, Votes, User-Entscheidung und Memory verbinden
+- BitShit später über stabile Adapterfläche anbinden
+
+## Command-Standard
+
+Alle sichtbaren Hauptcommands beginnen mit `bkg-`, damit sie unter `/` zusammenhängend auffindbar sind.
+
+Aktuelle Hauptcommands:
+
+- `/bkg-zero`
+- `/bkg-brain`
+- `/bkg-hit`
+- `/bkg-some`
+- `/bkg-ever`
+- `/bkg-fucker`
+
+Legacy-Hauptcommands wie `/0ero`, `/1brain`, `/2hit`, `/3some`, `/4ever` und `/4ucker` werden nicht mehr als primäre Commands geführt.
+
 ## Lane 0 — Repo hygiene / baseline
 
-**Ziel:** Das Plugin muss sauber installierbar und typprüfbar werden.
+**Ziel:** Das Plugin muss sauber installierbar und typprüfbar sein.
 
 **Files:**
 
@@ -22,10 +49,12 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 **Tasks:**
 
 - [x] Package name geprüft: `bkg-oc-plugin-bkg-dfma`
-- [x] `npm run typecheck` sicherstellen
-- [x] CI für typecheck hinzufügen
+- [x] `npm run typecheck` sichergestellt
+- [x] CI für typecheck hinzugefügt
 - [x] README auf plugin-ready Ziel aktualisiert
 - [x] Lizenz/Attribution geprüft (MIT, copyright 2026 eysho.dev)
+- [x] Runtime-State-Pfad auf neuen Paketnamen korrigiert
+- [x] `update.md` als produktiver Update-Plan angelegt
 
 **Done wenn:**
 
@@ -53,6 +82,7 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 - [x] Install/copy helper (rekursiv mit Unterverzeichnissen)
 - [x] Rule validation
 - [x] Tests (`tests/rules-loader.test.ts`, 13 Tests)
+- [x] Six-main-Regel auf `bkg-*` Commands normalisiert
 
 **Done wenn:**
 
@@ -82,6 +112,7 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 - [x] Personality-Presets definiert (orchestrator, builder, reviewer, product, architect, growth, contrarian, chair, recorder, auditor)
 - [x] Tool scopes dokumentiert in Agent-Markdown-Files
 - [x] Export `createIdentityRegistry()` und `getPersonality()`
+- [x] Six-main-Orchestrator auf `bkg-*` Commands aktualisiert
 
 **Done wenn:**
 
@@ -193,7 +224,7 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 - `psinetron/opencode-visualiser`
 - bisherige Live Debate Dashboard Idee
 
-**Ziel:** Dashboard öffnet/aktualisiert bei Fragen oder Blockern; User kann Approve/Reject klicken.
+**Ziel:** Dashboard öffnet/aktualisiert bei Fragen oder Blockern; User kann Approve/Reject/Revise klicken.
 
 **Files:**
 
@@ -213,6 +244,7 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 - [x] `/api/vote` und `/api/vote/tally`
 - [x] `/api/user/approve`, `/api/user/reject`, `/api/user/revise`
 - [x] browser UI (`src/dashboard/static/index.html`, `app.js`, `style.css`)
+- [x] README auf approve/reject/revise korrigiert; Annotationen als geplant markiert
 
 **Done wenn:**
 
@@ -280,7 +312,8 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 
 **Tasks:**
 
-- [x] Alle six commands (`assets/opencode/commands/0ero.md` bis `4ucker.md`)
+- [x] Six commands auf `bkg-*` normalisiert (`bkg-zero`, `bkg-brain`, `bkg-hit`, `bkg-some`, `bkg-ever`, `bkg-fucker`)
+- [x] Legacy-Zahlencommands aus `assets/opencode/commands/` entfernt
 - [x] Orchestrator agent (`bkg-orchestrator.md`, `bkg-six-main-orchestrator.md`)
 - [x] 4ucker team agents (`bkg-4ucker-builder.md`, `bkg-4ucker-product.md`, `bkg-4ucker-reviewer.md`)
 - [x] Rat agents (`bkg-rat-architect.md`, `bkg-rat-builder.md`, `bkg-rat-contrarian.md`, `bkg-rat-growth.md`, `bkg-rat-product.md`, `bkg-rat-reviewer.md`)
@@ -293,27 +326,37 @@ Wichtig: Keine Lane darf heimlich das komplette Projekt umbauen. Sonst haben wir
 - `npm run install:assets` installiert ein vollständiges OpenCode Pack.
 - `opencode.json` wird automatisch aktualisiert (Plugin-Referenz, Agenten, Skills, Permissions).
 
-## Empfehlung: Welche Agents starten?
+## Jetzt produktiv weiterarbeiten
 
-Starte 5 Agents parallel:
+**Sofort nächste Tasks:**
 
-1. **Agent A — Core/Types**: Lane 0 + Lane 8
-2. **Agent B — Rules/Assets**: Lane 1 + Lane 9
-3. **Agent C — Memory/Delegation**: Lane 3 + Lane 4
-4. **Agent D — Rat/Vote/Blocker**: Lane 5
-5. **Agent E — Dashboard/TTS**: Lane 6 + Lane 7
+- [ ] CI auf aktuellem Head laufen lassen: `npm run ci`
+- [ ] Dependency-Baum prüfen: `npm ls --depth=0`
+- [ ] Whitespace/Format prüfen: `git diff --check`
+- [ ] Lokal OpenCode neu starten und prüfen, ob `/bkg-` Commands sichtbar sind
+- [ ] Falls `postinstall` für öffentliche Nutzung zu aggressiv ist: Env-Gate oder Notice nachziehen
+- [ ] Annotationen entweder implementieren oder weiter klar als geplant führen
+- [ ] Danach Version-Bump vorbereiten
 
-## Merge-Reihenfolge
+## Agent-Einsatz ab jetzt
 
-1. Core/Types
-2. Rules/Assets
-3. Memory/Delegation
-4. Rat/Vote/Blocker
-5. Dashboard/TTS
-6. Integration pass
+Starte nur noch zielgerichtete Agents:
 
-## Sofort nächste Aufgabe
+1. **Agent A — Release Gate**: CI, npm ls, diff check, package dry-run
+2. **Agent B — Command UX**: `/bkg-*` Sichtbarkeit lokal prüfen
+3. **Agent C — Postinstall Policy**: privat behalten oder public-safe gaten
+4. **Agent D — Review Gate Next**: Annotationen/Line-Edits als nächstes echtes Feature
 
-```text
-Alle Lanes sind implementiert. Nächster Schritt: Fourth Voice API an echten externen Dienst anbinden (z.B. OpenAI/Anthropic API für ChatGPT-Reviewer), dann Version bump und npm publish vorbereiten.
-```
+## Merge-/Arbeitsregel
+
+Keine neuen Großideen in diesen Stand kippen.
+
+Erst prüfen:
+
+1. Commands sichtbar
+2. CI grün
+3. State-Pfad korrekt
+4. README ehrlich
+5. Produktiver Start möglich
+
+Danach weiterbauen.
